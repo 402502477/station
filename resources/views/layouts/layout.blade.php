@@ -62,7 +62,7 @@
                         </ul>
                     </li>--}}
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ asset('ui/img/user.png') }}" class="img-circle" alt="Avatar"> <span>Samuel</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><img src="{{ asset('ui/img/user.png') }}" class="img-circle" alt="Avatar"> <span>{{ Auth::user()->name }}</span> <i class="icon-submenu lnr lnr-chevron-down"></i></a>
                         <ul class="dropdown-menu">
                             <li><a href=""><i class="lnr lnr-user"></i> <span>我的资料</span></a></li>
                             <li><a href=""><i class="lnr lnr-envelope"></i> <span>我的消息</span></a></li>
@@ -80,8 +80,10 @@
         <div class="sidebar-scroll">
             <nav>
                 <ul class="nav">
-                    <li><a href="{{ url('/') }}" class="active"><i class="lnr lnr-home"></i> <span>首页</span></a></li>
-                    <li><a href="{{ url('/members/index') }}" class=""><i class="lnr lnr-user"></i> <span>用户管理</span></a></li>
+                    <li><a href="{{ url('/Manages/home') }}" class="{{ $active == 'home' ? 'active' : '' }}"><i class="lnr lnr-home"></i> <span>首页</span></a></li>
+                    <li><a href="{{ url('/Manages/members/index') }}" class="{{ $active == 'user' ? 'active' : '' }}"><i class="lnr lnr-user"></i> <span>用户管理</span></a></li>
+                    <li><a href="{{ url('/Manages/coupons/index') }}" class="{{ $active == 'coupon' ? 'active' : '' }}"><i class="lnr lnr-bookmark"></i> <span>优惠券管理</span></a></li>
+                    <li><a href="{{ url('/Manages/orders/index') }}" class="{{ $active == 'order' ? 'active' : '' }}"><i class="lnr lnr-cart"></i> <span>订单管理</span></a></li>
                     <li>
                         <a href="#subPages" data-toggle="collapse" class="collapsed"><i class="lnr lnr-file-empty"></i> <span>Pages</span> <i class="icon-submenu lnr lnr-chevron-left"></i></a>
                         <div id="subPages" class="collapse ">

@@ -12,8 +12,16 @@
 */
 Auth::routes();
 
-Route::get('/', 'Home\HomeController@index')->name('home');
+Route::get('/Manages/home', 'Manages\HomeController@index')->name('home');
 
-Route::group(['prefix' => 'members'],function(){
-    Route::get('index','Members\MemberController@index');
+Route::group(['prefix' => 'Manages/members'],function(){
+    Route::get('index','Manages\MemberController@index');
+});
+
+Route::group(['prefix' => 'Manages/coupons'],function(){
+    Route::get('index','Manages\CouponController@index');
+});
+
+Route::group(['prefix' => 'Manages/orders'],function(){
+    Route::get('index','Manages\OrderController@index');
 });

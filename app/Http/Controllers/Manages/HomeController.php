@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Home;
+namespace App\Http\Controllers\Manages;
 
 use App\Http\Controllers\CommonController;
 use Illuminate\Http\Request;
@@ -24,6 +24,8 @@ class HomeController extends CommonController
      */
     public function index()
     {
-        return view('home');
+        return view('home',[
+            'active' => 'home'
+        ]);
     }
 }

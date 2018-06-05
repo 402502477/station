@@ -443,7 +443,7 @@ var Chartist = {
    *
    * @memberof Chartist.Core
    * @param {Object} data The series object that contains the data to be visualized in the chart
-   * @param {Boolean} [reverse] If true the whole data is reversed by the getDataArray call. This will modify the data object passed as first parameter. The labels as well as the series order is reversed. The whole series data arrays are reversed too.
+   * @param {Boolean} [reverse] If true the whole data is reversed by the getDataArray call. This will modify the data object passed as first parameter. The labels as well as the series orders is reversed. The whole series data arrays are reversed too.
    * @param {Boolean} [multi] Create a multi dimensional array from a series data array where a value object with `x` and `y` values will be created.
    * @return {Array} A plain array that contains the data to be visualized in the chart
    */
@@ -523,11 +523,11 @@ var Chartist = {
   };
 
   /**
-   * Calculate the order of magnitude for the chart scale
+   * Calculate the orders of magnitude for the chart scale
    *
    * @memberof Chartist.Core
    * @param {Number} value The value Range of the chart
-   * @return {Number} The order of magnitude
+   * @return {Number} The orders of magnitude
    */
   Chartist.orderOfMagnitude = function (value) {
     return Math.floor(Math.log(Math.abs(value)) / Math.LN10);
@@ -2041,7 +2041,7 @@ var Chartist = {
    *
    * @memberof Chartist.Svg
    * @param {Object|String} attributes An object with properties that will be added as attributes to the SVG element that is created. Attributes with undefined values will not be added. If this parameter is a String then the function is used as a getter and will return the attribute value.
-   * @param {String} [ns] If specified, the attribute will be obtained using getAttributeNs. In order to write namepsaced attributes you can use the namespace:attribute notation within the attributes object.
+   * @param {String} [ns] If specified, the attribute will be obtained using getAttributeNs. In orders to write namepsaced attributes you can use the namespace:attribute notation within the attributes object.
    * @return {Object|String} The current wrapper object will be returned so it can be used for chaining or the attribute value if used as getter function.
    */
   function attr(attributes, ns) {
@@ -2904,7 +2904,7 @@ var Chartist = {
   }
 
   /**
-   * Split a Svg.Path object by a specific command in the path chain. The path chain will be split and an array of newly created paths objects will be returned. This is useful if you'd like to split an SVG path by it's move commands, for example, in order to isolate chunks of drawings.
+   * Split a Svg.Path object by a specific command in the path chain. The path chain will be split and an array of newly created paths objects will be returned. This is useful if you'd like to split an SVG path by it's move commands, for example, in orders to isolate chunks of drawings.
    *
    * @memberof Chartist.Svg.Path
    * @param {String} command The command you'd like to use to split the path
@@ -2930,7 +2930,7 @@ var Chartist = {
    * This static function on `Chartist.Svg.Path` is joining multiple paths together into one paths.
    *
    * @memberof Chartist.Svg.Path
-   * @param {Array<Chartist.Svg.Path>} paths A list of paths to be joined together. The order is important.
+   * @param {Array<Chartist.Svg.Path>} paths A list of paths to be joined together. The orders is important.
    * @param {boolean} close If the newly created path should be a closed path
    * @param {Object} options Path options for the newly created path.
    * @return {Chartist.Svg.Path}
@@ -3084,7 +3084,7 @@ var Chartist = {
 
 }(window, document, Chartist));
 ;/**
- * The auto scale axis uses standard linear scale projection of values along an axis. It uses order of magnitude to find a scale automatically and evaluates the available space in order to find the perfect amount of ticks for your chart.
+ * The auto scale axis uses standard linear scale projection of values along an axis. It uses orders of magnitude to find a scale automatically and evaluates the available space in orders to find the perfect amount of ticks for your chart.
  * **Options**
  * The following options are used by this axis in addition to the default axis options outlined in the axis configuration of the chart default settings.
  * ```javascript
@@ -3320,7 +3320,7 @@ var Chartist = {
     },
     // When set to true, the last grid line on the x-axis is not drawn and the chart elements will expand to the full available width of the chart. For the last label to be drawn correctly you might need to add chart padding or offset the last label with a draw event handler.
     fullWidth: false,
-    // If true the whole data is reversed including labels, the series order as well as the whole series data arrays.
+    // If true the whole data is reversed including labels, the series orders as well as the whole series data arrays.
     reverseData: false,
     // Override the class names that get used to generate the SVG structure of the chart
     classNames: {
@@ -3492,7 +3492,7 @@ var Chartist = {
         // We project the areaBase value into screen coordinates
         var areaBaseProjected = chartRect.y1 - axisY.projectValue(areaBase);
 
-        // In order to form the area we'll first split the path by move commands so we can chunk it up into segments
+        // In orders to form the area we'll first split the path by move commands so we can chunk it up into segments
         path.splitByCommand('M').filter(function onlySolidSegments(pathSegment) {
           // We filter only "solid" segments that contain more than one point. Otherwise there's no need for an area
           return pathSegment.pathElements.length > 1;
@@ -3728,11 +3728,11 @@ var Chartist = {
     // If set to 'overlap' this property will force the stacked bars to draw from the zero line.
     // If set to 'accumulate' this property will form a total for each series point. This will also influence the y-axis and the overall bounds of the chart. In stacked mode the seriesBarDistance property will have no effect.
     stackMode: 'accumulate',
-    // Inverts the axes of the bar chart in order to draw a horizontal bar chart. Be aware that you also need to invert your axis settings as the Y Axis will now display the labels and the X Axis the values.
+    // Inverts the axes of the bar chart in orders to draw a horizontal bar chart. Be aware that you also need to invert your axis settings as the Y Axis will now display the labels and the X Axis the values.
     horizontalBars: false,
     // If set to true then each bar will represent a series and the data array is expected to be a one dimensional array of data values rather than a series array of series. This is useful if the bar chart should represent a profile rather than some data over time.
     distributeSeries: false,
-    // If true the whole data is reversed including labels, the series order as well as the whole series data arrays.
+    // If true the whole data is reversed including labels, the series orders as well as the whole series data arrays.
     reverseData: false,
     // If the bar chart should add a background fill to the .ct-grids group.
     showGridBackground: false,
@@ -3779,7 +3779,7 @@ var Chartist = {
       options.classNames.chart + (options.horizontalBars ? ' ' + options.classNames.horizontalBars : '')
     );
 
-    // Drawing groups in correct order
+    // Drawing groups in correct orders
     var gridGroup = this.svg.elem('g').addClass(options.classNames.gridGroup);
     var seriesGroup = this.svg.elem('g');
     var labelGroup = this.svg.elem('g').addClass(options.classNames.labelGroup);
@@ -4120,7 +4120,7 @@ var Chartist = {
     },
     // The start angle of the pie chart in degrees where 0 points north. A higher value offsets the start angle clockwise.
     startAngle: 0,
-    // An optional total you can specify. By specifying a total value, the sum of the values in the series must be this total in order to draw a full pie. You can use this parameter to draw only parts of a pie or gauge charts.
+    // An optional total you can specify. By specifying a total value, the sum of the values in the series must be this total in orders to draw a full pie. You can use this parameter to draw only parts of a pie or gauge charts.
     total: undefined,
     // If specified the donut CSS classes will be used and strokes will be drawn instead of pie slices.
     donut: false,
@@ -4137,7 +4137,7 @@ var Chartist = {
     labelInterpolationFnc: Chartist.noop,
     // Label direction can be 'neutral', 'explode' or 'implode'. The labels anchor will be positioned based on those settings as well as the fact if the labels are on the right or left side of the center of the chart. Usually explode is useful when labels are positioned far away from the center.
     labelDirection: 'neutral',
-    // If true the whole data is reversed including labels, the series order as well as the whole series data arrays.
+    // If true the whole data is reversed including labels, the series orders as well as the whole series data arrays.
     reverseData: false,
     // If true empty values will be ignored to avoid drawing unncessary slices and labels
     ignoreEmptyValues: false
