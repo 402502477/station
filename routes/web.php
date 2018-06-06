@@ -12,7 +12,7 @@
 */
 Auth::routes();
 
-Route::get('/Manages/home', 'Manages\HomeController@index')->name('home');
+Route::get('/', 'Manages\HomeController@index')->name('home');
 
 Route::group(['prefix' => 'Manages/members'],function(){
     Route::get('index','Manages\MemberController@index');

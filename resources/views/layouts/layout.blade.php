@@ -20,6 +20,7 @@
     <!-- ICONS -->
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('ui/img/apple-icon.png') }}">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('ui/img/favicon.png') }}">
+    <link rel="stylesheet" href="{{ asset('css/layouts.css') }}">
     @section('header')
 
     @show
@@ -34,9 +35,6 @@
             <a href="{{ url('/home') }}"><img src="{{ asset('ui/img/logo-dark.png') }}" alt="Klorofil Logo" class="img-responsive logo"></a>
         </div>
         <div class="container-fluid">
-            <div class="navbar-btn">
-                <button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
-            </div>
             {{--<form class="navbar-form navbar-left">
                 <div class="input-group">
                     <input type="text" value="" class="form-control" placeholder="Search dashboard...">
@@ -44,6 +42,10 @@
                 </div>
             </form>--}}
             <div id="navbar-menu">
+
+                <div class="navbar-btn">
+                    <button type="button" class="btn-toggle-fullwidth"><i class="lnr lnr-arrow-left-circle"></i></button>
+                </div>
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle icon-menu" data-toggle="dropdown">
@@ -80,7 +82,7 @@
         <div class="sidebar-scroll">
             <nav>
                 <ul class="nav">
-                    <li><a href="{{ url('/Manages/home') }}" class="{{ $active == 'home' ? 'active' : '' }}"><i class="lnr lnr-home"></i> <span>首页</span></a></li>
+                    <li><a href="{{ url('/') }}" class="{{ $active == 'home' ? 'active' : '' }}"><i class="lnr lnr-home"></i> <span>首页</span></a></li>
                     <li><a href="{{ url('/Manages/members/index') }}" class="{{ $active == 'user' ? 'active' : '' }}"><i class="lnr lnr-user"></i> <span>用户管理</span></a></li>
                     <li><a href="{{ url('/Manages/coupons/index') }}" class="{{ $active == 'coupon' ? 'active' : '' }}"><i class="lnr lnr-bookmark"></i> <span>优惠券管理</span></a></li>
                     <li><a href="{{ url('/Manages/orders/index') }}" class="{{ $active == 'order' ? 'active' : '' }}"><i class="lnr lnr-cart"></i> <span>订单管理</span></a></li>

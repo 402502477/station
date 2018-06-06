@@ -11,7 +11,7 @@
                 @csrf
                 <div class="form-group">
                     <label for="signin-email" class="control-label sr-only">Email</label>
-                    <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="signin-email" value="{{ old('email') }}" placeholder="Email">
+                    <input type="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="signin-email" value="{{ old('email') }}" name="email" placeholder="Email">
                     @if ($errors->has('email'))
                         <span class="invalid-feedback">
                             <strong>{{ $errors->first('email') }}</strong>
@@ -20,7 +20,7 @@
                 </div>
                 <div class="form-group">
                     <label for="signin-password" class="control-label sr-only">Password</label>
-                    <input type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="signin-password" value="{{ old('password') }}" placeholder="Password">
+                    <input type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" id="signin-password" name="password" value="{{ old('password') }}" placeholder="Password">
                     @if ($errors->has('password'))
                         <span class="invalid-feedback">
                             <strong>{{ $errors->first('password') }}</strong>
