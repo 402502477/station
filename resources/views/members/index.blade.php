@@ -21,8 +21,6 @@
                     <button class="btn btn-primary" type="button">123</button>
                     <button class="btn btn-danger">123</button>
                 </form>
-
-
             </div>
             <table class="table table-hover">
                 <thead>
