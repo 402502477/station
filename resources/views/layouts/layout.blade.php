@@ -129,6 +129,7 @@
 <script src="{{ asset('ui/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
 <script src="{{ asset('ui/vendor/chartist/js/chartist.min.js') }}"></script>
 <script src="{{ asset('ui/scripts/klorofil-common.js') }}"></script>
+<script src="{{ asset('js/app.js') }}"></script>
 @section('footer')
 @show
 </body>
