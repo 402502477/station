@@ -25,8 +25,33 @@
 
     @show
 </head>
-
 <body>
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{{--mask--}}
+<div class="mask">
+    <div class="loading-icon">
+        <div class="lds-css ng-scope">
+            <div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>
+        </div>
+    </div>
+</div>
 <!-- WRAPPER -->
 <div id="wrapper">
     <!-- NAVBAR -->
@@ -106,7 +131,12 @@
         <!-- MAIN CONTENT -->
         <div class="main-content">
             <div class="container-fluid">
-                @section('content');
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+                    Launch demo modal
+                </button>
+
+            @section('content');
 
                 @show
             </div>
@@ -130,6 +160,10 @@
 <script src="{{ asset('ui/vendor/chartist/js/chartist.min.js') }}"></script>
 <script src="{{ asset('ui/scripts/klorofil-common.js') }}"></script>
 <script src="{{ asset('js/app.js') }}"></script>
+<script>
+    app.onPreLoading();
+    app.onFullSwitch();
+</script>
 @section('footer')
 @show
 </body>

@@ -16,6 +16,7 @@ Route::get('/', 'Manages\HomeController@index')->name('home');
 
 Route::group(['prefix' => 'Manages/members'],function(){
     Route::get('index','Manages\MemberController@index');
+    Route::get('detail/{uid}','Manages\MemberController@detail');
 });
 
 Route::group(['prefix' => 'Manages/coupons'],function(){

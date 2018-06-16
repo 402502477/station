@@ -1,9 +1,9 @@
 @extends('layouts.layout')
-@section('title','用户列表')
+@section('title','用户信息')
 @section('content')
     <div class="panel">
         <div class="panel-heading">
-            <h3 class="panel-title">用户管理</h3>
+            <h3 class="panel-title">详细信息</h3>
         </div>
         <div class="panel-body">
             <div class="handler">

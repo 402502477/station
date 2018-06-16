@@ -13,4 +13,10 @@ class MemberController extends CommonController
             'active' => 'user'
         ]);
     }
+    public function detail($uid)
+    {
+        return view('members/detail',[
+            'active' => '',
+        ]);
+    }
 }
