@@ -1,98 +1,225 @@
 @extends('layouts.layout')
 @section('title','用户信息')
 @section('content')
-    <div class="panel">
-        <div class="panel-heading">
-            <h3 class="panel-title">详细信息</h3>
-        </div>
-        <div class="panel-body">
-            <div class="handler">
-                <form action="" class="form-inline">
-                    <div class="form-group">
-                        <select class="form-control" name="length">
-                            <option value="10">显示10条</option>
-                            <option value="20">显示20条</option>
-                            <option value="50">显示50条</option>
-                        </select>
+    <div class="panel panel-profile">
+        <div class="clearfix">
+            <!-- LEFT COLUMN -->
+            <div class="profile-left">
+                <!-- PROFILE HEADER -->
+                <div class="profile-header">
+                    <div class="overlay"></div>
+                    <div class="profile-main">
+                        <img src="assets/img/user-medium.png" class="img-circle" alt="Avatar">
+                        <h3 class="name">Samuel Gold</h3>
+                        <span class="online-status status-available">Available</span>
                     </div>
-                    <button class="btn btn-primary" type="button" onclick="app.getCheckId()">操作</button>
-                    <button class="btn btn-danger">批量删除</button>
-                </form>
+                    <div class="profile-stat">
+                        <div class="row">
+                            <div class="col-md-4 stat-item">
+                                45 <span>Projects</span>
+                            </div>
+                            <div class="col-md-4 stat-item">
+                                15 <span>Awards</span>
+                            </div>
+                            <div class="col-md-4 stat-item">
+                                2174 <span>Points</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END PROFILE HEADER -->
+                <!-- PROFILE DETAIL -->
+                <div class="profile-detail">
+                    <div class="profile-info">
+                        <h4 class="heading">Basic Info</h4>
+                        <ul class="list-unstyled list-justify">
+                            <li>Birthdate <span>24 Aug, 2016</span></li>
+                            <li>Mobile <span>(124) 823409234</span></li>
+                            <li>Email <span>samuel@mydomain.com</span></li>
+                            <li>Website <span><a href="#">www.themeineed.com</a></span></li>
+                        </ul>
+                    </div>
+                    <div class="profile-info">
+                        <h4 class="heading">Social</h4>
+                        <ul class="list-inline social-icons">
+                            <li><a href="#" class="facebook-bg"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#" class="twitter-bg"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#" class="google-plus-bg"><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="#" class="github-bg"><i class="fa fa-github"></i></a></li>
+                        </ul>
+                    </div>
+                    <div class="profile-info">
+                        <h4 class="heading">About</h4>
+                        <p>Interactively fashion excellent information after distinctive outsourcing.</p>
+                    </div>
+                    <div class="text-center"><a href="#" class="btn btn-primary">Edit Profile</a></div>
+                </div>
+                <!-- END PROFILE DETAIL -->
             </div>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th>
-                        <label class="fancy-checkbox full-switch">
-                            <input type="checkbox">
-                            <span></span>
-                        </label>
-                    </th>
-                    <th>序号</th>
-                    <th>姓名</th>
-                    <th>手机号</th>
-                    <th>会员等级</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <label class="fancy-checkbox">
-                            <input type="checkbox" data-id="1">
-                            <span></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>steven</td>
-                    <td>1350569555</td>
-                    <td>1</td>
-                    <td>
-                        <button class="btn btn-primary btn-xs">信息</button>
-                        <button class="btn btn-success btn-xs">确认</button>
-                        <button class="btn btn-danger btn-xs">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label class="fancy-checkbox">
-                            <input type="checkbox" data-id="2">
-                            <span></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>steven</td>
-                    <td>1350569555</td>
-                    <td>1</td>
-                    <td>
-                        <button class="btn btn-primary btn-xs">信息</button>
-                        <button class="btn btn-success btn-xs">确认</button>
-                        <button class="btn btn-danger btn-xs">删除</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <label class="fancy-checkbox">
-                            <input type="checkbox" data-id="3">
-                            <span></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>steven</td>
-                    <td>1350569555</td>
-                    <td>1</td>
-                    <td>
-                        <button class="btn btn-primary btn-xs">信息</button>
-                        <button class="btn btn-success btn-xs">确认</button>
-                        <button class="btn btn-danger btn-xs">删除</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <ul class="pagination">
-                <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-            </ul>
+            <!-- END LEFT COLUMN -->
+            <!-- RIGHT COLUMN -->
+            <div class="profile-right">
+                <h4 class="heading">Samuel's Awards</h4>
+                <!-- AWARDS -->
+                <div class="awards">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-6">
+                            <div class="award-item">
+                                <div class="hexagon">
+                                    <span class="lnr lnr-sun award-icon"></span>
+                                </div>
+                                <span>Most Bright Idea</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="award-item">
+                                <div class="hexagon">
+                                    <span class="lnr lnr-clock award-icon"></span>
+                                </div>
+                                <span>Most On-Time</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="award-item">
+                                <div class="hexagon">
+                                    <span class="lnr lnr-magic-wand award-icon"></span>
+                                </div>
+                                <span>Problem Solver</span>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-sm-6">
+                            <div class="award-item">
+                                <div class="hexagon">
+                                    <span class="lnr lnr-heart award-icon"></span>
+                                </div>
+                                <span>Most Loved</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="text-center"><a href="#" class="btn btn-default">See all awards</a></div>
+                </div>
+                <!-- END AWARDS -->
+                <!-- TABBED CONTENT -->
+                <div class="custom-tabs-line tabs-line-bottom left-aligned">
+                    <ul class="nav" role="tablist">
+                        <li class=""><a href="#tab-bottom-left1" role="tab" data-toggle="tab" aria-expanded="false">Recent Activity</a></li>
+                        <li class="active"><a href="#tab-bottom-left2" role="tab" data-toggle="tab" aria-expanded="true">Projects <span class="badge">7</span></a></li>
+                    </ul>
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane fade" id="tab-bottom-left1">
+                        <ul class="list-unstyled activity-timeline">
+                            <li>
+                                <i class="fa fa-comment activity-icon"></i>
+                                <p>Commented on post <a href="#">Prototyping</a> <span class="timestamp">2 minutes ago</span></p>
+                            </li>
+                            <li>
+                                <i class="fa fa-cloud-upload activity-icon"></i>
+                                <p>Uploaded new file <a href="#">Proposal.docx</a> to project <a href="#">New Year Campaign</a> <span class="timestamp">7 hours ago</span></p>
+                            </li>
+                            <li>
+                                <i class="fa fa-plus activity-icon"></i>
+                                <p>Added <a href="#">Martin</a> and <a href="#">3 others colleagues</a> to project repository <span class="timestamp">Yesterday</span></p>
+                            </li>
+                            <li>
+                                <i class="fa fa-check activity-icon"></i>
+                                <p>Finished 80% of all <a href="#">assigned tasks</a> <span class="timestamp">1 day ago</span></p>
+                            </li>
+                        </ul>
+                        <div class="margin-top-30 text-center"><a href="#" class="btn btn-default">See all activity</a></div>
+                    </div>
+                    <div class="tab-pane fade active in" id="tab-bottom-left2">
+                        <div class="table-responsive">
+                            <table class="table project-table">
+                                <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Progress</th>
+                                    <th>Leader</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><a href="#">Spot Media</a></td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
+                                                <span>60% Complete</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><img src="assets/img/user2.png" alt="Avatar" class="avatar img-circle"> <a href="#">Michael</a></td>
+                                    <td><span class="label label-success">ACTIVE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">E-Commerce Site</a></td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%;">
+                                                <span>33% Complete</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><img src="assets/img/user1.png" alt="Avatar" class="avatar img-circle"> <a href="#">Antonius</a></td>
+                                    <td><span class="label label-warning">PENDING</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">Project 123GO</a></td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" style="width: 68%;">
+                                                <span>68% Complete</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><img src="assets/img/user1.png" alt="Avatar" class="avatar img-circle"> <a href="#">Antonius</a></td>
+                                    <td><span class="label label-success">ACTIVE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">Wordpress Theme</a></td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">
+                                                <span>75%</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><img src="assets/img/user2.png" alt="Avatar" class="avatar img-circle"> <a href="#">Michael</a></td>
+                                    <td><span class="label label-success">ACTIVE</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">Project 123GO</a></td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                <span>100%</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><img src="assets/img/user1.png" alt="Avatar" class="avatar img-circle"> <a href="#">Antonius</a></td>
+                                    <td><span class="label label-default">CLOSED</span></td>
+                                </tr>
+                                <tr>
+                                    <td><a href="#">Redesign Landing Page</a></td>
+                                    <td>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                                <span>100%</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td><img src="assets/img/user5.png" alt="Avatar" class="avatar img-circle"> <a href="#">Jason</a></td>
+                                    <td><span class="label label-default">CLOSED</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!-- END TABBED CONTENT -->
+            </div>
+            <!-- END RIGHT COLUMN -->
         </div>
     </div>
 @stop

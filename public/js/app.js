@@ -1,5 +1,7 @@
 let app = {
     server_url: '',
+    api_url: '',
+    api_options : '',
     onFullSwitch() {
         $('.full-switch input[type=checkbox]').change(function () {
             let obj = $('input[type=checkbox]');
@@ -39,7 +41,21 @@ let app = {
             }
         }
     },
-    alert() {
-
+    alert(options) {
+        let modal = $('#modalBlock');
+        modal.on('show.bs.modal',function(){
+            modal.find('.modal-title').text(options.title || '提示');
+            modal.find('.modal-body').text(options.content || '');
+            if(options.showCancel){
+                modal.find('.onCancel').show();
+            }else{
+                modal.find('.onCancel').hide()
+            }
+            modal.find('.onCancel').off("click");
+            modal.find('.onSure').off("click");
+            modal.find('.onCancel').click(options.onCancel || function(){});
+            modal.find('.onSure').click(options.onSure || function(){});
+        });
+        modal.modal('toggle');
     }
 };
