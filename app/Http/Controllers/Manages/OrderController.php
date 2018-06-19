@@ -13,4 +13,10 @@ class OrderController extends CommonController
             'active' => 'order'
         ]);
     }
+    public function info($id)
+    {
+        return view('orders/info',[
+            'active' => ''
+        ]);
+    }
 }

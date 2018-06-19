@@ -27,4 +27,5 @@ Route::group(['prefix' => 'Manages/coupons'],function(){
 
 Route::group(['prefix' => 'Manages/orders'],function(){
     Route::get('index','Manages\OrderController@index');
+    Route::get('info/{oid}','Manages\OrderController@info');
 });

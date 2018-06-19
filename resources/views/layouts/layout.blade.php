@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ asset('ui/vendor/font-awesome/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('ui/vendor/linearicons/style.css') }}">
     <link rel="stylesheet" href="{{ asset('ui/vendor/chartist/css/chartist-custom.css') }}">
+    <link rel="stylesheet" href="{{ asset('ui/vendor/toastr/toastr.min.css') }}">
     <!-- MAIN CSS -->
     <link rel="stylesheet" href="{{ asset('ui/css/main.css') }}">
     <!-- FOR DEMO PURPOSES ONLY. You should remove this in your project -->
@@ -153,6 +154,7 @@
 <script src="{{ asset('ui/vendor/jquery-slimscroll/jquery.slimscroll.min.js') }}"></script>
 <script src="{{ asset('ui/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
 <script src="{{ asset('ui/vendor/chartist/js/chartist.min.js') }}"></script>
+<script src="{{ asset('ui/vendor/toastr/toastr.min.js') }}"></script>
 <script src="{{ asset('ui/scripts/klorofil-common.js') }}"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 <script>

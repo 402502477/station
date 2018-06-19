@@ -6,7 +6,7 @@
             <h3 class="panel-title">用户管理</h3>
         </div>
         <div class="panel-body">
-            <div class="handler">
+            <div class="handler clearfix">
                 <form action="" class="form-inline">
                     <div class="col-sm-6">
                         <div class="form-group">

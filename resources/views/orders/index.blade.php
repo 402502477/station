@@ -1,12 +1,19 @@
 @extends('layouts.layout')
 @section('title','订单管理')
 @section('content')
-    <div class="panel">
+    <div class="panel" id="toastr-demo">
         <div class="panel-heading">
             <h3 class="panel-title">订单管理</h3>
         </div>
         <div class="panel-body">
-            <div class="handler">
+            <h4>Context</h4>
+            <p class="demo-button">
+                <button type="button" class="btn btn-primary btn-toastr" data-context="info" data-message="This is general theme info" data-position="top-right">General Info</button>
+                <button type="button" class="btn btn-success btn-toastr" data-context="success" data-message="This is success info" data-position="top-right">Success Info</button>
+                <button type="button" class="btn btn-warning btn-toastr" data-context="warning" data-message="This is warning info" data-position="top-right">Warning Info</button>
+                <button type="button" class="btn btn-danger btn-toastr" data-context="error" data-message="This is error info" data-position="top-right">Error Info</button>
+            </p>
+            <div class="handler clearfix">
                 <form action="" class="form-inline">
                     <div class="col-sm-6">
                         <div class="form-group">
@@ -41,11 +48,13 @@
                             <span></span>
                         </label>
                     </th>
-                    <th>序号</th>
-                    <th>姓名</th>
-                    <th>手机号</th>
-                    <th>会员等级</th>
-                    <th>操作</th>
+                    <th>订单编号</th>
+                    <th>总金额</th>
+                    <th>支付金额</th>
+                    <th>优惠金额</th>
+                    <th>创建时间</th>
+                    <th>订单状态</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -56,12 +65,16 @@
                             <span></span>
                         </label>
                     </td>
-                    <td>1</td>
-                    <td>steven</td>
-                    <td>1350569555</td>
-                    <td>1</td>
+                    <td>201608091254566</td>
+                    <td>100</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>2018-06-21 13:31</td>
                     <td>
-                        <button class="btn btn-primary btn-xs">信息</button>
+                        <span class="label label-danger">未支付</span>
+                    </td>
+                    <td>
+                        <a class="btn btn-primary btn-xs" href="{{ url('Manages/orders/info/1') }}">信息</a>
                         <button class="btn btn-success btn-xs">确认</button>
                         <button class="btn btn-danger btn-xs">删除</button>
                     </td>
@@ -69,33 +82,20 @@
                 <tr>
                     <td>
                         <label class="fancy-checkbox">
-                            <input type="checkbox" data-id="2">
+                            <input type="checkbox" data-id="1">
                             <span></span>
                         </label>
                     </td>
-                    <td>1</td>
-                    <td>steven</td>
-                    <td>1350569555</td>
-                    <td>1</td>
+                    <td>201608091254566</td>
+                    <td>100</td>
+                    <td>80</td>
+                    <td>20</td>
+                    <td>2018-06-21 13:31</td>
                     <td>
-                        <button class="btn btn-primary btn-xs">信息</button>
-                        <button class="btn btn-success btn-xs">确认</button>
-                        <button class="btn btn-danger btn-xs">删除</button>
+                        <span class="label label-success">已完成</span>
                     </td>
-                </tr>
-                <tr>
                     <td>
-                        <label class="fancy-checkbox">
-                            <input type="checkbox" data-id="3">
-                            <span></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>steven</td>
-                    <td>1350569555</td>
-                    <td>1</td>
-                    <td>
-                        <button class="btn btn-primary btn-xs">信息</button>
+                        <a class="btn btn-primary btn-xs" href="{{ url('Manages/orders/info/1') }}">信息</a>
                         <button class="btn btn-success btn-xs">确认</button>
                         <button class="btn btn-danger btn-xs">删除</button>
                     </td>
