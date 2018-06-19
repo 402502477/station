@@ -9,20 +9,20 @@
                 <div class="profile-header">
                     <div class="overlay"></div>
                     <div class="profile-main">
-                        <img src="assets/img/user-medium.png" class="img-circle" alt="Avatar">
+                        <img src="{{ asset('ui/img/user-medium.png') }}" class="img-circle" alt="Avatar">
                         <h3 class="name">Samuel Gold</h3>
-                        <span class="online-status status-available">Available</span>
+                        {{--<span class="online-status status-available">Available</span>--}}
                     </div>
                     <div class="profile-stat">
                         <div class="row">
                             <div class="col-md-4 stat-item">
-                                45 <span>Projects</span>
+                                45 <span>Project 1</span>
                             </div>
                             <div class="col-md-4 stat-item">
-                                15 <span>Awards</span>
+                                15 <span>Project 2</span>
                             </div>
                             <div class="col-md-4 stat-item">
-                                2174 <span>Points</span>
+                                123 <span>Project 3</span>
                             </div>
                         </div>
                     </div>
@@ -31,35 +31,33 @@
                 <!-- PROFILE DETAIL -->
                 <div class="profile-detail">
                     <div class="profile-info">
-                        <h4 class="heading">Basic Info</h4>
+                        <h4 class="heading">基本信息</h4>
                         <ul class="list-unstyled list-justify">
-                            <li>Birthdate <span>24 Aug, 2016</span></li>
-                            <li>Mobile <span>(124) 823409234</span></li>
-                            <li>Email <span>samuel@mydomain.com</span></li>
-                            <li>Website <span><a href="#">www.themeineed.com</a></span></li>
+                            <li>手机号 <span>18605518325</span></li>
+                            <li>性别 <span>男</span></li>
+                            <li>生日 <span>1993-8-22</span></li>
+                            <li>加入时间 <span>2016-9-21</span></li>
                         </ul>
                     </div>
                     <div class="profile-info">
-                        <h4 class="heading">Social</h4>
-                        <ul class="list-inline social-icons">
-                            <li><a href="#" class="facebook-bg"><i class="fa fa-facebook"></i></a></li>
-                            <li><a href="#" class="twitter-bg"><i class="fa fa-twitter"></i></a></li>
-                            <li><a href="#" class="google-plus-bg"><i class="fa fa-google-plus"></i></a></li>
-                            <li><a href="#" class="github-bg"><i class="fa fa-github"></i></a></li>
+                        <h4 class="heading">发票信息</h4>
+                        <ul class="list-unstyled list-justify">
+                            <li>xx <span></span></li>
+                            <li>发票信息 </li>
                         </ul>
                     </div>
-                    <div class="profile-info">
+                    {{--<div class="profile-info">
                         <h4 class="heading">About</h4>
                         <p>Interactively fashion excellent information after distinctive outsourcing.</p>
                     </div>
-                    <div class="text-center"><a href="#" class="btn btn-primary">Edit Profile</a></div>
+                    <div class="text-center"><a href="#" class="btn btn-primary">Edit Profile</a></div>--}}
                 </div>
                 <!-- END PROFILE DETAIL -->
             </div>
             <!-- END LEFT COLUMN -->
             <!-- RIGHT COLUMN -->
             <div class="profile-right">
-                <h4 class="heading">Samuel's Awards</h4>
+                <h4 class="heading">会员信息</h4>
                 <!-- AWARDS -->
                 <div class="awards">
                     <div class="row">
@@ -102,12 +100,13 @@
                 <!-- TABBED CONTENT -->
                 <div class="custom-tabs-line tabs-line-bottom left-aligned">
                     <ul class="nav" role="tablist">
-                        <li class=""><a href="#tab-bottom-left1" role="tab" data-toggle="tab" aria-expanded="false">Recent Activity</a></li>
-                        <li class="active"><a href="#tab-bottom-left2" role="tab" data-toggle="tab" aria-expanded="true">Projects <span class="badge">7</span></a></li>
+                        <li class="active"><a href="#step" role="tab" data-toggle="tab" aria-expanded="">会员足迹</a></li>
+                        <li class=""><a href="#coupon" role="tab" data-toggle="tab" aria-expanded="">优惠券 <span class="badge">7</span></a></li>
+                        <li class=""><a href="#order" role="tab" data-toggle="tab" aria-expanded="">订单记录</a></li>
                     </ul>
                 </div>
                 <div class="tab-content">
-                    <div class="tab-pane fade" id="tab-bottom-left1">
+                    <div class="tab-pane fade in active" id="step">
                         <ul class="list-unstyled activity-timeline">
                             <li>
                                 <i class="fa fa-comment activity-icon"></i>
@@ -126,95 +125,55 @@
                                 <p>Finished 80% of all <a href="#">assigned tasks</a> <span class="timestamp">1 day ago</span></p>
                             </li>
                         </ul>
-                        <div class="margin-top-30 text-center"><a href="#" class="btn btn-default">See all activity</a></div>
+                        <div class="margin-top-30 text-center"><a href="#" class="btn btn-default">查看全部</a></div>
                     </div>
-                    <div class="tab-pane fade active in" id="tab-bottom-left2">
+                    <div class="tab-pane fade in" id="coupon">
                         <div class="table-responsive">
                             <table class="table project-table">
                                 <thead>
                                 <tr>
-                                    <th>Title</th>
-                                    <th>Progress</th>
-                                    <th>Leader</th>
-                                    <th>Status</th>
+                                    <th>优惠券编号</th>
+                                    <th>发放时间</th>
+                                    <th>状态</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="margin-top-30 text-center"><a href="#" class="btn btn-default">查看全部</a></div>
+                    </div>
+
+                    <div class="tab-pane fade in" id="order">
+                        <div class="table-responsive">
+                            <table class="table project-table">
+                                <thead>
+                                <tr>
+                                    <th>编号</th>
+                                    <th>金额</th>
+                                    <th>状态</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
                                     <td><a href="#">Spot Media</a></td>
                                     <td>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;">
-                                                <span>60% Complete</span>
-                                            </div>
-                                        </div>
                                     </td>
-                                    <td><img src="assets/img/user2.png" alt="Avatar" class="avatar img-circle"> <a href="#">Michael</a></td>
+                                    <td></td>
                                     <td><span class="label label-success">ACTIVE</span></td>
                                 </tr>
-                                <tr>
-                                    <td><a href="#">E-Commerce Site</a></td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="33" aria-valuemin="0" aria-valuemax="100" style="width: 33%;">
-                                                <span>33% Complete</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><img src="assets/img/user1.png" alt="Avatar" class="avatar img-circle"> <a href="#">Antonius</a></td>
-                                    <td><span class="label label-warning">PENDING</span></td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">Project 123GO</a></td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="68" aria-valuemin="0" aria-valuemax="100" style="width: 68%;">
-                                                <span>68% Complete</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><img src="assets/img/user1.png" alt="Avatar" class="avatar img-circle"> <a href="#">Antonius</a></td>
-                                    <td><span class="label label-success">ACTIVE</span></td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">Wordpress Theme</a></td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 75%;">
-                                                <span>75%</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><img src="assets/img/user2.png" alt="Avatar" class="avatar img-circle"> <a href="#">Michael</a></td>
-                                    <td><span class="label label-success">ACTIVE</span></td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">Project 123GO</a></td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                                                <span>100%</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><img src="assets/img/user1.png" alt="Avatar" class="avatar img-circle"> <a href="#">Antonius</a></td>
-                                    <td><span class="label label-default">CLOSED</span></td>
-                                </tr>
-                                <tr>
-                                    <td><a href="#">Redesign Landing Page</a></td>
-                                    <td>
-                                        <div class="progress">
-                                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                                                <span>100%</span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><img src="assets/img/user5.png" alt="Avatar" class="avatar img-circle"> <a href="#">Jason</a></td>
-                                    <td><span class="label label-default">CLOSED</span></td>
-                                </tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr></tr>
+                                <tr></tr>
                                 </tbody>
                             </table>
                         </div>
+                        <div class="margin-top-30 text-center"><a href="#" class="btn btn-default">查看全部</a></div>
                     </div>
                 </div>
                 <!-- END TABBED CONTENT -->

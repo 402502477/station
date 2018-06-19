@@ -13,4 +13,16 @@ class CouponController extends CommonController
            'active' => 'coupon'
         ]);
     }
+    public function create()
+    {
+        return view('coupons/create',[
+            'active' => '',
+        ]);
+    }
+    public function info()
+    {
+        return view('coupons/info',[
+            'active' => '',
+        ]);
+    }
 }

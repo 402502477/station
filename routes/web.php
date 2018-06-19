@@ -21,6 +21,8 @@ Route::group(['prefix' => 'Manages/members'],function(){
 
 Route::group(['prefix' => 'Manages/coupons'],function(){
     Route::get('index','Manages\CouponController@index');
+    Route::get('create','Manages\CouponController@create');
+    Route::get('info/{cid}','Manages\CouponController@info');
 });
 
 Route::group(['prefix' => 'Manages/orders'],function(){

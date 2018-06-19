@@ -8,15 +8,28 @@
         <div class="panel-body">
             <div class="handler">
                 <form action="" class="form-inline">
-                    <div class="form-group">
-                        <select class="form-control" name="length">
-                            <option value="10">显示10条</option>
-                            <option value="20">显示20条</option>
-                            <option value="50">显示50条</option>
-                        </select>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <select class="form-control input-sm" name="length">
+                                <option value="10">显示10条</option>
+                                <option value="20">显示20条</option>
+                                <option value="50">显示50条</option>
+                            </select>
+                        </div>
+                        <a href="{{ url('Manages/coupons/create') }}" class="btn btn-primary btn-sm" type="button">添加</a>
+                        <button class="btn btn-danger btn-sm" type="button">批量删除</button>
                     </div>
-                    <button class="btn btn-primary" type="button" onclick="app.getCheckId()">操作</button>
-                    <button class="btn btn-danger">批量删除</button>
+                    <div class="col-sm-6 text-right">
+                        <div class="form-group">
+                            <select class="form-control input-sm" name="length">
+                                <option value="10">请选择搜索类型</option>
+                                <option value="20"></option>
+                                <option value="50"></option>
+                            </select>
+                            <input type="text" class="form-control input-sm">
+                            <button class="btn btn-default btn-sm">搜索</button>
+                        </div>
+                    </div>
                 </form>
             </div>
             <table class="table table-hover">

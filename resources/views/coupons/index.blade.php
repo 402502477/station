@@ -8,15 +8,28 @@
         <div class="panel-body">
             <div class="handler">
                 <form action="" class="form-inline">
-                    <div class="form-group">
-                        <select class="form-control" name="length">
-                            <option value="10">显示10条</option>
-                            <option value="20">显示20条</option>
-                            <option value="50">显示50条</option>
-                        </select>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <select class="form-control input-sm" name="length">
+                                <option value="10">显示10条</option>
+                                <option value="20">显示20条</option>
+                                <option value="50">显示50条</option>
+                            </select>
+                        </div>
+                        <a href="{{ url('Manages/coupons/create') }}" class="btn btn-primary btn-sm" type="button">添加</a>
+                        <button class="btn btn-danger btn-sm" type="button">批量删除</button>
                     </div>
-                    <button class="btn btn-primary" type="button">操作</button>
-                    <button class="btn btn-danger">批量删除</button>
+                    <div class="col-sm-6 text-right">
+                        <div class="form-group">
+                            <select class="form-control input-sm" name="length">
+                                <option value="10">请选择搜索类型</option>
+                                <option value="20"></option>
+                                <option value="50"></option>
+                            </select>
+                            <input type="text" class="form-control input-sm">
+                            <button class="btn btn-default btn-sm">搜索</button>
+                        </div>
+                    </div>
                 </form>
             </div>
             <table class="table table-hover">
@@ -29,9 +42,10 @@
                         </label>
                     </th>
                     <th>序号</th>
-                    <th>姓名</th>
-                    <th>手机号</th>
-                    <th>会员等级</th>
+                    <th>标题</th>
+                    <th>使用时间</th>
+                    <th>折扣</th>
+                    <th>状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -47,8 +61,9 @@
                     <td>steven</td>
                     <td>1350569555</td>
                     <td>1</td>
+                    <td></td>
                     <td>
-                        <button class="btn btn-primary btn-xs">信息</button>
+                        <a class="btn btn-primary btn-xs" href="{{ url('Manages/coupons/info/2') }}">信息</a>
                         <button class="btn btn-success btn-xs">确认</button>
                         <button class="btn btn-danger btn-xs">删除</button>
                     </td>
