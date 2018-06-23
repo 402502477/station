@@ -6,88 +6,82 @@
             <h3 class="panel-title">添加优惠券</h3>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal" name="create_coupon" method="post" action="{{ url('api/coupon/create') }}">
-                <div class="form-group">
-                    <label for="title" class="col-sm-2 control-label">标题</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="title" class="form-control" id="title" placeholder="请输入优惠券标题">
-                        <p class="help-block"></p>
+            <form class="layui-form layui-form-pane" name="create_coupon" method="post" action="{{ url('api/coupon/create') }}">
+                <div class="layui-form-item">
+                    <span for="title" class="layui-form-label">标题</span>
+                    <div class="layui-input-block">
+                        <input type="text" name="title" autocomplete="off" class="layui-input" id="title" placeholder="请输入优惠券标题">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="type" class="col-sm-2 control-label">优惠券类型</label>
-                    <div class="col-sm-3">
-                        <select class="form-control" id="type" name="type">
-                            <option value="">请选择优惠券类型</option>
-                            <option value="1">现金抵用券</option>
-                        </select>
-                        <p class="help-block"></p>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <span for="type" class="layui-form-label">优惠券类型</span>
+                        <div class="layui-input-block">
+                            <select id="type" name="type">
+                                <option value="">请选择优惠券类型</option>
+                                <option value="1">现金抵用券</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-sm-7"></div>
                 </div>
-                <div class="form-group">
-                    <label for="deadlineType" class="col-sm-2 control-label">使用期限类型</label>
-                    <div class="col-sm-3">
-                        <select name="deadline_type" class="form-control" id="deadlineType">
-                            <option value="">请选择使用期限类型</option>
-                            <option value="range_day">按时间区间类型</option>
-                            <option value="use_day">按发起后天数类型</option>
-                        </select>
-                        <p class="help-block"></p>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <span for="deadlineType" class="layui-form-label">期限类型</span>
+                        <div class="layui-input-block">
+                            <select name="deadline_type" id="deadlineType" lay-filter="deadlineType">
+                                <option value="">请选择使用期限类型</option>
+                                <option value="range_day">按时间区间类型</option>
+                                <option value="use_day">按发起后天数类型</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="col-sm-7"></div>
+                    <div class="layui-inline use_day hidden">
+                        <span for="deadline" class="layui-form-label">使用时间</span>
+                        <div class="layui-input-block">
+                            <input type="text" id="use_day" class="layui-input" autocomplete="off" placeholder="请输入使用天数">
+                        </div>
+                    </div>
                 </div>
-                <div class="form-group use_day hidden">
-                    <label for="deadline" class="col-sm-2 control-label">使用时间</label>
-                    <div class="col-sm-3">
-                        <input type="text" id="use_day" class="form-control" placeholder="请输入使用天数">
-                        <p class="help-block"></p>
+                <div class="layui-form-item range_day hidden">
+                    <span for="range_day" class="layui-form-label">使用时间</span>
+                    <div class="layui-input-block">
+                        <input type="text" class="layui-input" id="range_day" autocomplete="off" placeholder="请选择时间区间">
                     </div>
                 </div>
 
-                <div class="form-group range_day hidden">
-                    <label for="range_day" class="col-sm-2 control-label">使用时间</label>
-                    <div class="col-sm-6">
-                        <input type="text" class="form-control" id="range_day" placeholder="请选择时间区间">
-                        <p class="help-block"></p>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <span for="discount" class="layui-form-label">优惠点数</span>
+                        <div class="layui-input-block">
+                            <input type="number" name="discount" id="discount" class="layui-input" placeholder="请输入折扣点数" autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <span for="discount_type" class="layui-form-label">优惠单位</span>
+                        <div class="layui-input-block">
+                            <select name="discount_type" id="discount_type">
+                                <option value="">请选择折扣单位</option>
+                                <option value="1">￥</option>
+                                <option value="2">%</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="discount" class="col-sm-2 control-label">优惠点数</label>
-                    <div class="col-sm-3">
-                        <input type="number" name="discount" id="discount" class="form-control" placeholder="请输入折扣点数">
-                        <p class="help-block"></p>
+                <div class="layui-form-item layui-form-text">
+                    <span for="introduce" class="layui-form-label">优惠券介绍</span>
+                    <div class="layui-input-block">
+                        <textarea name="introduce" id="introduce" class="layui-textarea" lay-verify="content" placeholder="请输入优惠券介绍"></textarea>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="discount_type" class="col-sm-2 control-label">优惠单位</label>
-                    <div class="col-sm-3">
-                        <select name="discount_type" id="discount_type" class="form-control">
-                            <option value="">请选择折扣单位</option>
-                            <option value="1">￥</option>
-                            <option value="2">%</option>
-                        </select>
-                        <p class="help-block"></p>
-                    </div>
-                    <div class="col-sm-7"></div>
-                </div>
-                <div class="form-group">
-                    <label for="introduce" class="col-sm-2 control-label">优惠券介绍</label>
-                    <div class="col-sm-10">
-                        <textarea name="introduce" id="introduce" cols="30" rows="10" class="form-control"></textarea>
-                        <p class="help-block"></p>
+                <div class="layui-form-item">
+                    <span for="stock" class="layui-form-label">库存</span>
+                    <div class="layui-input-block">
+                        <input type="number" id="stock" name="stock"  class="layui-input" placeholder="请输入库存总数">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="stock" class="col-sm-2 control-label">库存</label>
-                    <div class="col-sm-4">
-                        <input type="number" id="stock" name="stock"  class="form-control" placeholder="请输入库存总数">
-                        <p class="help-block"></p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <button type="submit" class="btn btn-success">创建</button>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button type="submit" class="layui-btn" lay-submit lay-filter="*">创建</button>
                     </div>
                 </div>
             </form>
@@ -96,52 +90,53 @@
 @stop
 @section('footer')
     <script>
-        app.onSubmit();
-        $('#deadlineType').change(function(){
-            let type = $('#deadlineType option:selected').val();
-            if(type === 'use_day')
-            {
-                $('.use_day').removeClass('hidden');
-                $('#use_day').attr('name','deadline');
-                $('.range_day').addClass('hidden');
-                $('#range_day').attr('name','');
-                return;
-            }
-            if(type === 'range_day')
-            {
-                $('.use_day').addClass('hidden');
-                $('#use_day').attr('name','');
-                $('.range_day').removeClass('hidden');
-                $('#range_day').attr('name','deadline');
-                return;
-            }
-            $('.use_day').addClass('hidden');
-            $('.range_day').addClass('hidden');
-        });
-
-        layui.use('layedit', function(){
+        layui.use(['form', 'layedit', 'laydate'], function(){
             let introduce = layui.layedit ;
-
             let content = introduce.build('introduce',{
-                hideTool:['face'],
-                uploadImage:{
-                    url:''
-                },
+                hideTool:['face','image']
             });
-            console.log(introduce.getContent(content))
-            introduce.sync(content)
-        });
-        layui.use('laydate', function(){
+
             let laydate = layui.laydate;
             laydate.render({
                 elem: '#range_day',
                 type:'datetime',
                 range:true,
-                calendar: true,
-                done(value, date, endDate)
-                {
+                calendar: true
+            });
+            let form = layui.form;
+            form.verify({
+                content(){
+                    introduce.sync(content);
                 }
             });
+            form.on('select(deadlineType)', function(data){
+                let type = data.value;
+                if(type === 'use_day')
+                {
+                    $('.use_day').removeClass('hidden');
+                    $('#use_day').attr('name','deadline');
+                    $('.range_day').addClass('hidden');
+                    $('#range_day').attr('name','');
+                    return;
+                }
+                if(type === 'range_day')
+                {
+                    $('.use_day').addClass('hidden');
+                    $('#use_day').attr('name','');
+                    $('.range_day').removeClass('hidden');
+                    $('#range_day').attr('name','deadline');
+                    return;
+                }
+                $('.use_day').addClass('hidden');
+                $('.range_day').addClass('hidden');
+            });
+
+            form.on('submit(*)', function(data){
+                app.onSubmit('create_coupon',data.field);
+                return false;
+            });
+
+
         });
     </script>
 @stop

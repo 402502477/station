@@ -58,45 +58,68 @@ let app = {
         });
         modal.modal('toggle');
     },
-    onSubmit(callback)
+    onSubmit(from_name,data,callback)
     {
-        $('button[type=submit]').click(function(){
-            let form = $(this).parents('form');
-            let data = form.serializeArray();
-            let method = form.attr('method');
-            let action = form.attr('action');
-            $.ajax({
-                url : action,
-                type : method || 'get',
-                data : data,
-                beforeSend()
+        let form = $('form[name=' + from_name + ']');
+        let method = form.attr('method');
+        let action = form.attr('action');
+        $.ajax({
+            url : action,
+            type : method || 'get',
+            data : data,
+            beforeSend()
+            {
+                app.showPreLoading();
+            },
+            complete(r)
+            {
+                console.log(r);
+                if(r.status === 200)
                 {
-                    app.showPreLoading();
-                },
-                complete(r)
-                {
-                    let feedback = $('p.help-block');
-                    for(let i = 0;i<feedback.length ; i++)
+                    if(r.responseJSON.code === 1)
                     {
-                        feedback.eq(i).html('');
-                        feedback.parents('.form-group').removeClass('has-error').addClass('has-success');
+                        app.alert({
+                            content : r.responseJSON.msg,
+                        });
+                        return app.hidePreLoading();
                     }
-
-                    if(r.status === 422)
-                    {
-                        let errors = r.responseJSON.errors;
-                        for(let i in errors)
-                        {
-                            $('[name='+i+']').parents('.form-group').removeClass('has-success').addClass('has-error');
-                            $('[name='+i+'] + .help-block').html();
-                            $('[name='+i+'] + .help-block').html(errors[i]);
-                        }
-                    }
-                    console.log(r);
-                    app.hidePreLoading();
+                    app.alert({
+                        content : r.responseJSON.msg,
+                    });
+                    return app.hidePreLoading();
                 }
-            });
-            return false;
+                if(r.status === 422)
+                {
+                    let errors = r.responseJSON.errors;
+                    let is_focus = false
+                    for(let i in data)
+                    {
+                        if(errors[i])
+                        {
+                            if(!is_focus)
+                            {
+                                $('[name=' + i + ']').addClass('layui-form-danger');
+                                $('[name=' + i + ']').focus();
+                                is_focus = true;
+                                app.alert({
+                                    content : errors[i][0],
+                                });
+                                continue;
+                            }
+                        }
+                        $('[name=' + i + ']').removeClass('layui-form-danger');
+                    }
+                    return app.hidePreLoading();
+
+                }
+                if(r.status === 500)
+                {
+                    app.alert({
+                        content : r.responseJSON.message,
+                    });
+                    return app.hidePreLoading();
+                }
+            }
         });
     }
 };

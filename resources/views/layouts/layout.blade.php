@@ -42,8 +42,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default onCancel" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary onSure" data-dismiss="modal">Save changes</button>
+                <button type="button" class="btn btn-default onCancel" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary onSure" data-dismiss="modal">OK!</button>
             </div>
         </div>
     </div>
