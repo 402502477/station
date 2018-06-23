@@ -57,5 +57,46 @@ let app = {
             modal.find('.onSure').click(options.onSure || function(){});
         });
         modal.modal('toggle');
+    },
+    onSubmit(callback)
+    {
+        $('button[type=submit]').click(function(){
+            let form = $(this).parents('form');
+            let data = form.serializeArray();
+            let method = form.attr('method');
+            let action = form.attr('action');
+            $.ajax({
+                url : action,
+                type : method || 'get',
+                data : data,
+                beforeSend()
+                {
+                    app.showPreLoading();
+                },
+                complete(r)
+                {
+                    let feedback = $('p.help-block');
+                    for(let i = 0;i<feedback.length ; i++)
+                    {
+                        feedback.eq(i).html('');
+                        feedback.parents('.form-group').removeClass('has-error').addClass('has-success');
+                    }
+
+                    if(r.status === 422)
+                    {
+                        let errors = r.responseJSON.errors;
+                        for(let i in errors)
+                        {
+                            $('[name='+i+']').parents('.form-group').removeClass('has-success').addClass('has-error');
+                            $('[name='+i+'] + .help-block').html();
+                            $('[name='+i+'] + .help-block').html(errors[i]);
+                        }
+                    }
+                    console.log(r);
+                    app.hidePreLoading();
+                }
+            });
+            return false;
+        });
     }
 };
