@@ -18,6 +18,7 @@
                     <div class="col-sm-3">
                         <select class="form-control" id="type" name="type">
                             <option>请选择优惠券类型</option>
+                            <option value="1">现金抵用券</option>
                         </select>
                     </div>
                     <div class="col-sm-7"></div>
@@ -27,22 +28,29 @@
                     <div class="col-sm-3">
                         <select name="deadline-type" class="form-control" id="deadlineType">
                             <option value="">请选择使用期限类型</option>
-                            <option value="range">按时间区间类型</option>
-                            <option value="day">按发起后天数类型</option>
+                            <option value="range_day">按时间区间类型</option>
+                            <option value="use_day">按发起后天数类型</option>
                         </select>
                     </div>
                     <div class="col-sm-7"></div>
                 </div>
-                <div class="form-group">
+                <div class="form-group use_day hidden">
                     <label for="deadline" class="col-sm-2 control-label">使用时间</label>
-                    <div class="col-sm-10">
-                        <input type="text" name="deadline" id="deadline" class="form-control">
+                    <div class="col-sm-3">
+                        <input type="text" name="deadline" id="use_day" class="form-control" placeholder="请输入使用天数">
+                    </div>
+                </div>
+
+                <div class="form-group range_day hidden">
+                    <label for="range_day" class="col-sm-2 control-label">使用时间</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="start" class="form-control" id="range_day" placeholder="请选择时间区间">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="discount" class="col-sm-2 control-label">优惠金额</label>
-                    <div class="col-sm-10">
-                        <input type="number" name="discount" id="discount" class="form-control">
+                    <div class="col-sm-3">
+                        <input type="number" name="discount" id="discount" class="form-control" placeholder="请输入折扣金额">
                     </div>
                 </div>
                 <div class="form-group">
@@ -64,8 +72,8 @@
                 </div>
                 <div class="form-group">
                     <label for="stock" class="col-sm-2 control-label">库存</label>
-                    <div class="col-sm-10">
-                        <input type="number" id="stock" name="stock"  class="form-control">
+                    <div class="col-sm-4">
+                        <input type="number" id="stock" name="stock"  class="form-control" placeholder="请输入库存总数">
                     </div>
                 </div>
                 <div class="form-group">
@@ -78,4 +86,47 @@
     </div>
 @stop
 @section('footer')
+    <script>
+        $('#deadlineType').change(function(){
+            let type = $('#deadlineType option:selected').val();
+            if(type === 'use_day')
+            {
+                $('.use_day').removeClass('hidden');
+                $('.range_day').addClass('hidden');
+                return;
+            }
+            if(type === 'range_day')
+            {
+                $('.use_day').addClass('hidden');
+                $('.range_day').removeClass('hidden');
+                return;
+            }
+            $('.use_day').addClass('hidden');
+            $('.range_day').addClass('hidden');
+        });
+
+        layui.use('layedit', function(){
+            let introduce = layui.layedit ;
+
+            introduce.build('introduce',{
+                hideTool:['face'],
+                uploadImage:{
+                    url:''
+                }
+            });
+        });
+        layui.use('laydate', function(){
+            let laydate = layui.laydate;
+            laydate.render({
+                elem: '#range_day',
+                type:'datetime',
+                range:true,
+                calendar: true,
+                done(value, date, endDate)
+                {
+                }
+            });
+        });
+        $()
+    </script>
 @stop

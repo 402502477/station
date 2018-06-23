@@ -6,13 +6,6 @@
             <h3 class="panel-title">订单管理</h3>
         </div>
         <div class="panel-body">
-            <h4>Context</h4>
-            <p class="demo-button">
-                <button type="button" class="btn btn-primary btn-toastr" data-context="info" data-message="This is general theme info" data-position="top-right">General Info</button>
-                <button type="button" class="btn btn-success btn-toastr" data-context="success" data-message="This is success info" data-position="top-right">Success Info</button>
-                <button type="button" class="btn btn-warning btn-toastr" data-context="warning" data-message="This is warning info" data-position="top-right">Warning Info</button>
-                <button type="button" class="btn btn-danger btn-toastr" data-context="error" data-message="This is error info" data-position="top-right">Error Info</button>
-            </p>
             <div class="handler clearfix">
                 <form action="" class="form-inline">
                     <div class="col-sm-6">

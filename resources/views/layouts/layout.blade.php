@@ -21,6 +21,9 @@
     <!-- ICONS -->
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('ui/img/apple-icon.png') }}">
     <link rel="icon" type="image/png" sizes="96x96" href="{{ asset('ui/img/favicon.png') }}">
+    <!-- layui css -->
+    <link rel="stylesheet" href="{{ asset('layui/css/layui.css') }}">
+
     <link rel="stylesheet" href="{{ asset('css/layouts.css') }}">
     @section('header')
 
@@ -156,6 +159,7 @@
 <script src="{{ asset('ui/vendor/chartist/js/chartist.min.js') }}"></script>
 <script src="{{ asset('ui/vendor/toastr/toastr.min.js') }}"></script>
 <script src="{{ asset('ui/scripts/klorofil-common.js') }}"></script>
+<script src="{{ asset('layui/layui.js') }}"></script>
 <script src="{{ asset('js/app.js') }}"></script>
 <script>
     app.onPreLoading();
