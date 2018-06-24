@@ -10,7 +10,7 @@
                 <form action="" class="form-inline">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <select class="form-control input-sm" name="length">
+                            <select class="form-control input-sm" name="length" onchange="getList({take:$(this).val()})">
                                 <option value="10">显示10条</option>
                                 <option value="20">显示20条</option>
                                 <option value="50">显示50条</option>
@@ -32,7 +32,7 @@
                     </div>
                 </form>
             </div>
-            <table class="table table-hover">
+            <table class="table table-hover coupon_list">
                 <thead>
                 <tr>
                     <th>
@@ -41,33 +41,17 @@
                             <span></span>
                         </label>
                     </th>
-                    <th>序号</th>
+                    <th>优惠券ID</th>
                     <th>标题</th>
                     <th>使用时间</th>
                     <th>折扣</th>
+                    <th>库存</th>
                     <th>状态</th>
                     <th>操作</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
-                        <label class="fancy-checkbox">
-                            <input type="checkbox">
-                            <span></span>
-                        </label>
-                    </td>
-                    <td>1</td>
-                    <td>steven</td>
-                    <td>1350569555</td>
-                    <td>1</td>
-                    <td></td>
-                    <td>
-                        <a class="btn btn-primary btn-xs" href="{{ url('Manages/coupons/info/2') }}">信息</a>
-                        <button class="btn btn-success btn-xs">确认</button>
-                        <button class="btn btn-danger btn-xs">删除</button>
-                    </td>
-                </tr>
+
                 </tbody>
             </table>
             <ul class="pagination">
@@ -79,14 +63,38 @@
 @stop
 @section('footer')
     <script>
-        var data = {};
-        app.getLists({
-            url : "{{ url('api/coupon/get') }}",
-            data : data,
-            success (r)
-            {
-                console.log(r)
-            }
-        })
+        getList({});
+        function getList(data)
+        {
+            app.getLists({
+                url : "{{ url('api/coupon/get') }}",
+                data : data,
+                success (r)
+                {
+                    let label_color = ['label-danger','label-success','label-warning'];
+                    let html = '';
+                    for(let i in r)
+                    {
+                        html += '<tr data-id="'+r[i].id+'"><td>' +
+                            '<label class="fancy-checkbox" data-id="'+r[i].id+'">' +
+                            '<input type="checkbox">' +
+                            '<span></span>' +
+                            '</label></td>' +
+                            '<td>'+r[i].id+'</td>' +
+                            '<td>'+r[i].title+'</td>' +
+                            '<td>'+r[i].time_limit+'</td>' +
+                            '<td>'+r[i].discount+'</td>' +
+                            '<td>'+r[i].stock+'</td>' +
+                            '<td><span class="label '+ label_color[r[i].status] +'" onclick="changeStatus(this)">'+r[i].status_text+'</span></td>' +
+                            '<td><a class="btn btn-primary btn-xs" data-id="'+r[i].id+'">信息</a> '+
+                            '<button class="btn btn-success btn-xs" data-id="'+r[i].id+'">确认</button> ' +
+                            '<button class="btn btn-danger btn-xs" data-id="'+r[i].id+'">删除</button> ' +
+                            '</td>' +
+                            '</tr>';
+                    }
+                    $('.coupon_list tbody').html(html);
+                }
+            })
+        }
     </script>
 @stop

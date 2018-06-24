@@ -64,6 +64,7 @@ let app = {
             url : options.url,
             data : options.data || {},
             type : options.method || 'get',
+            dataType : 'json',
             beforeSend()
             {
                 app.showPreLoading();
@@ -71,6 +72,7 @@ let app = {
             success(r)
             {
                 options.success(r);
+                app.hidePreLoading();
             }
         })
     },
@@ -83,6 +85,7 @@ let app = {
             url : action,
             type : method || 'get',
             data : data,
+            dataType : 'json',
             beforeSend()
             {
                 app.showPreLoading();

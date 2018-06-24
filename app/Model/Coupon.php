@@ -9,17 +9,25 @@ class Coupon extends Model
 {
     use SoftDeletes;
 
-    protected $dates = ['delete_at'];
-
     protected $guarded = [];
 
     protected $table = 'coupon';
-
-    protected $dateFormat = 'U';
 
     const CREATED_AT = 'create_at';
 
     const UPDATED_AT = 'update_at';
 
     const DELETED_AT = 'delete_at';
+
+    public function getDateFormat() {
+        return date('Y-m-d H:i');
+    }
+    public function freshTimestamp()
+    {
+        return time();
+    }
+    public function fromDateTime($value)
+    {
+        return $value;
+    }
 }
