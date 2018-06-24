@@ -16,6 +16,13 @@ class CouponApiController extends CommonController
     public function get(Request $request,$id = null)
     {
         $wh = [];
+        $search = $request -> input('search','');
+        if($search)
+        {
+            $keywords = $request -> input('keywords','');
+            $wh[] = [$search,'like','%'.$keywords.'%'];
+        }
+
         $skip = $request -> input('skip',0);
         $take = $request -> input('take',10);
         $select = ['id','title','promotions_detail','time_limit','status','create_at','extend'];
@@ -36,7 +43,27 @@ class CouponApiController extends CommonController
                 $vl['time_limit'] = $time_limit.'天';
             }
         }
-        return $this->toApi($datum);
+        $count = Coupon::where($wh)->count();
+        return $this->toApi([
+            'data' => $datum,
+            'skip' => $skip,
+            'limit' => $take,
+            'count' => $count
+        ]);
+    }
+    public function delete(Request $request)
+    {
+        $id = $request -> input('id','');
+        if(empty($id))
+        {
+            return $this -> toApi(['code'=> 0 ,'msg' => '非法操作！']);
+        }
+        $res = Coupon::destroy($id);
+        if($res)
+        {
+            return $this -> toApi(['code'=> 1 ,'msg' => '删除成功！']);
+        }
+        return $this -> toApi(['code'=> 1 ,'msg' => '删除失败！']);
     }
     public function create(Request $request)
     {

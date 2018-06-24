@@ -76,6 +76,20 @@ let app = {
             }
         })
     },
+    layOpen(msg,icon)
+    {
+        layui.use(['layer'],function(){
+            layer.open({
+                type :0,
+                content:msg,
+                icon:icon,
+                shade :0,
+                time : 2000,
+                btn: [],
+                anim :6
+            })
+        });
+    },
     onSubmit(from_name,data,callback)
     {
         let form = $('form[name=' + from_name + ']');
@@ -123,17 +137,7 @@ let app = {
                                 $('[name=' + i + ']').addClass('layui-form-danger');
                                 $('[name=' + i + ']').focus();
                                 is_focus = true;
-                                layui.use(['layer'],function(){
-                                    layer.open({
-                                        type :0,
-                                        content:errors[i][0],
-                                        icon:5,
-                                        shade :0,
-                                        time : 2000,
-                                        btn: [],
-                                        anim :6
-                                    })
-                                });
+                                app.layOpen(errors[i][0],5);
                                 continue;
                             }
                         }

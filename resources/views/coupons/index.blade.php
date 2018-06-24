@@ -10,7 +10,7 @@
                 <form action="" class="form-inline">
                     <div class="col-sm-6">
                         <div class="form-group">
-                            <select class="form-control input-sm" name="length" onchange="getList({take:$(this).val()})">
+                            <select class="form-control input-sm" name="length">
                                 <option value="10">显示10条</option>
                                 <option value="20">显示20条</option>
                                 <option value="50">显示50条</option>
@@ -21,13 +21,13 @@
                     </div>
                     <div class="col-sm-6 text-right">
                         <div class="form-group">
-                            <select class="form-control input-sm" name="length">
-                                <option value="10">请选择搜索类型</option>
-                                <option value="20"></option>
-                                <option value="50"></option>
+                            <select class="form-control input-sm" name="search">
+                                <option value="">请选择搜索类型</option>
+                                <option value="id">优惠券ID</option>
+                                <option value="title">标题</option>
                             </select>
-                            <input type="text" class="form-control input-sm">
-                            <button class="btn btn-default btn-sm">搜索</button>
+                            <input type="text" class="form-control input-sm"  name="keywords">
+                            <button class="btn btn-default btn-sm" type="button" name="searching">搜索</button>
                         </div>
                     </div>
                 </form>
@@ -54,45 +54,125 @@
 
                 </tbody>
             </table>
-            <ul class="pagination">
-                <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+            <ul class="pagination" id="pagination">
             </ul>
         </div>
     </div>
 @stop
 @section('footer')
     <script>
-        getList({});
-        function getList(data)
+        getList();
+        let take = null; //全局化页面数据显示长度
+
+        //切换页面数据长度
+        $('select[name=length]').change(function(){
+            take = $(this).val();
+            getList({
+                take:take
+            });
+        });
+
+        //搜索操作
+        $('button[name=searching]').click(function(){
+            let search = $('select[name=search]').val();
+            let keywords = $('input[name=keywords]').val();
+
+            if(!search || !keywords)
+            {
+                app.layOpen('请先选择搜索类型并输入搜索内容！',2);
+                return;
+            }
+            getList({
+                take : take,
+                search : search,
+                keywords : keywords
+            });
+        });
+        //删除信息
+        function onDelete(obj)
+        {
+            app.alert({
+                content:'确定要删除此条记录么？',
+                showCancel : true,
+                onSure()
+                {
+                    let id = $(obj).data('id');
+                    $.ajax({
+                        url : '{{url("api/coupon/delete")}}',
+                        data : {
+                            id : id
+                        },
+                        type : 'post',
+                        dataType : 'json',
+                        success(r)
+                        {
+                            if(r.code)
+                            {
+                                $(obj).parents('tr').remove()
+                                app.layOpen(r.msg,1);
+                                return;
+                            }
+                            app.layOpen(r.msg,2);
+                        }
+                    })
+                }
+            });
+
+        }
+        //获取列表方法
+        function getList(dt,method)
         {
             app.getLists({
                 url : "{{ url('api/coupon/get') }}",
-                data : data,
+                data : dt,
+                method : method || 'post',
                 success (r)
                 {
+                    let data = r.data;
                     let label_color = ['label-danger','label-success','label-warning'];
                     let html = '';
-                    for(let i in r)
+                    for(let i in data)
                     {
-                        html += '<tr data-id="'+r[i].id+'"><td>' +
-                            '<label class="fancy-checkbox" data-id="'+r[i].id+'">' +
+                        html += '<tr data-id="'+data[i].id+'"><td>' +
+                            '<label class="fancy-checkbox" data-id="'+data[i].id+'">' +
                             '<input type="checkbox">' +
                             '<span></span>' +
                             '</label></td>' +
-                            '<td>'+r[i].id+'</td>' +
-                            '<td>'+r[i].title+'</td>' +
-                            '<td>'+r[i].time_limit+'</td>' +
-                            '<td>'+r[i].discount+'</td>' +
-                            '<td>'+r[i].stock+'</td>' +
-                            '<td><span class="label '+ label_color[r[i].status] +'" onclick="changeStatus(this)">'+r[i].status_text+'</span></td>' +
-                            '<td><a class="btn btn-primary btn-xs" data-id="'+r[i].id+'">信息</a> '+
-                            '<button class="btn btn-success btn-xs" data-id="'+r[i].id+'">确认</button> ' +
-                            '<button class="btn btn-danger btn-xs" data-id="'+r[i].id+'">删除</button> ' +
+                            '<td>'+data[i].id+'</td>' +
+                            '<td>'+data[i].title+'</td>' +
+                            '<td>'+data[i].time_limit+'</td>' +
+                            '<td>'+data[i].discount+'</td>' +
+                            '<td>'+data[i].stock+'</td>' +
+                            '<td><span class="label '+ label_color[data[i].status] +'" onclick="changeStatus(this)">'+data[i].status_text+'</span></td>' +
+                            '<td><a class="btn btn-primary btn-xs" data-id="'+data[i].id+'">信息</a> '+
+                            '<button class="btn btn-success btn-xs" data-id="'+data[i].id+'">确认</button> ' +
+                            '<button class="btn btn-danger btn-xs" onclick="onDelete(this)" data-id="'+data[i].id+'">删除</button> ' +
                             '</td>' +
                             '</tr>';
                     }
                     $('.coupon_list tbody').html(html);
+
+
+                    layui.use('laypage', function(){
+                        let curr = parseInt(r.skip)+1;
+                        let page = layui.laypage;
+                        page.render({
+                            elem: 'pagination',
+                            count: r.count,
+                            limit: r.limit,
+                            theme:'#00AAFF',
+                            curr:curr,
+                            jump(obj,first)
+                            {
+                                if(!first)
+                                {
+                                    let skip = (obj.curr-1) * r.limit;
+                                    let take = $('select[name=length]').val();
+                                    getList({skip:skip,take:take});
+                                }
+                            }
+                        });
+                    });
                 }
             })
         }

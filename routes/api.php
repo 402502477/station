@@ -21,4 +21,5 @@ Route::get('/member','Api\MemberApiController@getMembers');
 Route::group(['prefix' => 'coupon'],function(){
     Route::post('create','Api\CouponApiController@create');
     Route::any('get/{id?}','Api\CouponApiController@get');
+    Route::post('delete','Api\CouponApiController@delete');
 });
