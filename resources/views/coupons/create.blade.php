@@ -90,7 +90,8 @@
 @stop
 @section('footer')
     <script>
-        layui.use(['form', 'layedit', 'laydate'], function(){
+        layui.use(['form', 'layedit', 'laydate','layer'], function(){
+            let layer = layui.layer;
             let introduce = layui.layedit ;
             let content = introduce.build('introduce',{
                 hideTool:['face','image']

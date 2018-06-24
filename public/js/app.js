@@ -58,6 +58,22 @@ let app = {
         });
         modal.modal('toggle');
     },
+    getLists(options)
+    {
+        $.ajax({
+            url : options.url,
+            data : options.data || {},
+            type : options.method || 'get',
+            beforeSend()
+            {
+                app.showPreLoading();
+            },
+            success(r)
+            {
+                options.success(r);
+            }
+        })
+    },
     onSubmit(from_name,data,callback)
     {
         let form = $('form[name=' + from_name + ']');
@@ -104,8 +120,16 @@ let app = {
                                 $('[name=' + i + ']').addClass('layui-form-danger');
                                 $('[name=' + i + ']').focus();
                                 is_focus = true;
-                                app.alert({
-                                    content : errors[i][0],
+                                layui.use(['layer'],function(){
+                                    layer.open({
+                                        type :0,
+                                        content:errors[i][0],
+                                        icon:5,
+                                        shade :0,
+                                        time : 2000,
+                                        btn: [],
+                                        anim :6
+                                    })
                                 });
                                 continue;
                             }

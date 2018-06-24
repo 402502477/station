@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Manages;
 
 use App\Http\Controllers\CommonController;
+use App\Model\Coupon;
 use Illuminate\Http\Request;
 
 class CouponController extends CommonController

@@ -78,4 +78,15 @@
     </div>
 @stop
 @section('footer')
+    <script>
+        var data = {};
+        app.getLists({
+            url : "{{ url('api/coupon/get') }}",
+            data : data,
+            success (r)
+            {
+                console.log(r)
+            }
+        })
+    </script>
 @stop

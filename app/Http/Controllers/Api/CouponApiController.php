@@ -10,6 +10,14 @@ use Illuminate\Http\Request;
 
 class CouponApiController extends CommonController
 {
+    public function get(Request $request,$id = null)
+    {
+        $wh = [];
+        $skip = $request -> input('skip',0);
+        $take = $request -> input('take',10);
+        $datum = Coupon::where($wh)->skip($skip)->take($take)->get();
+        return $this->toApi($datum);
+    }
     public function create(Request $request)
     {
         $data = $request->input();
