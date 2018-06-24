@@ -15,7 +15,7 @@ class CouponApiController extends CommonController
         $wh = [];
         $skip = $request -> input('skip',0);
         $take = $request -> input('take',10);
-        $datum = Coupon::where($wh)->skip($skip)->take($take)->get();
+        $datum = Coupon::where($wh)->orderBy('create_at','desc')->skip($skip)->take($take)->get();
         return $this->toApi($datum);
     }
     public function create(Request $request)
