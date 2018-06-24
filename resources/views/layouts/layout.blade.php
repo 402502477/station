@@ -31,7 +31,7 @@
 </head>
 <body>
 <!-- Modal -->
-<div class="modal fade" id="modalBlock" tabindex="-1" role="dialog" aria-labelledby="modalBlock">
+<div class="modal fade" id="modalBlock" tabindex="-1" role="dialog" aria-labelledby="modalBlock" data-keyboard="false" data-backdrop="static">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

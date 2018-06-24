@@ -30,12 +30,12 @@ class CouponApiController extends CommonController
         $create = [
             'title' => $data['title'],
             'describes' => $data['introduce'],
-            'promotions_detail' => json_encode([
+            'promotions_detail' => $this->toJson([
                 'type' => $data['discount_type'],
                 'point' => $data['discount']
             ]),
-            'time_limit' => $data['deadline'],
-            'extend' => json_encode($data),
+            'time_limit' => $this->toJson($data['deadline']),
+            'extend' => $this->toJson($data),
             'status' => 1
         ];
         $res = Coupon::create($create);

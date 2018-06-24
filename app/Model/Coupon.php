@@ -9,6 +9,8 @@ class Coupon extends Model
 {
     use SoftDeletes;
 
+    protected $dates = ['delete_at'];
+
     protected $guarded = [];
 
     protected $table = 'coupon';

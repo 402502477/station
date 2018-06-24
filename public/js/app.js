@@ -73,13 +73,16 @@ let app = {
             },
             complete(r)
             {
-                console.log(r);
                 if(r.status === 200)
                 {
                     if(r.responseJSON.code === 1)
                     {
                         app.alert({
                             content : r.responseJSON.msg,
+                            showCancel : true,
+                            onSure(){
+                                if(callback) callback();
+                            }
                         });
                         return app.hidePreLoading();
                     }

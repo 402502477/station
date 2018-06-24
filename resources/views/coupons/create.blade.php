@@ -132,11 +132,11 @@
             });
 
             form.on('submit(*)', function(data){
-                app.onSubmit('create_coupon',data.field);
+                app.onSubmit('create_coupon',data.field,function(){
+                    window.location = '{{ url('/Manages/coupons/index') }}'
+                });
                 return false;
             });
-
-
         });
     </script>
 @stop
