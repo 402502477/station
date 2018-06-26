@@ -20,10 +20,11 @@ class CouponController extends CommonController
             'active' => '',
         ]);
     }
-    public function info()
+    public function info($id)
     {
         return view('coupons/info',[
             'active' => '',
+            'id' => $id
         ]);
     }
 }

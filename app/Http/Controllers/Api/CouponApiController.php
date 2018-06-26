@@ -13,7 +13,7 @@ class CouponApiController extends CommonController
     protected $status = ['已删除','正常','过期','无库存'];
     protected $discount_type = [ 1 => '￥', 2 => '%'];
 
-    public function get(Request $request,$id = null)
+    public function get(Request $request)
     {
         $wh = [];
         $search = $request -> input('search','');
@@ -40,7 +40,7 @@ class CouponApiController extends CommonController
             {
                 $vl['time_limit'] = date('Y-m-d H:i:s',$time_limit[0]) . ' - ' .date('Y-m-d H:i:s',$time_limit[1]);
             }else{
-                $vl['time_limit'] = $time_limit.'天';
+                $vl['time_limit'] = '领取后 '.$time_limit.' 天失效';
             }
         }
         $count = Coupon::where($wh)->count();
@@ -50,6 +50,25 @@ class CouponApiController extends CommonController
             'limit' => $take,
             'count' => $count
         ]);
+    }
+    public function info($id = null)
+    {
+        $row = Coupon::where('id',$id)->first();
+        $extend = json_decode($row['extend'],true);
+        $row['extend'] = $extend;
+        $promotions = json_decode($row['promotions_detail'],true);
+        $time_limit = json_decode($row['time_limit'],true);
+        $row['stock'] = $extend['stock'];
+        $row['discount'] = '-'.$promotions['point'].$this->discount_type[$promotions['type']];
+        $row['status_text'] = $this->status[$row['status']];
+        if(is_array($time_limit))
+        {
+            $row['time_limit'] = date('Y-m-d H:i:s',$time_limit[0]) . ' - ' .date('Y-m-d H:i:s',$time_limit[1]);
+        }else{
+            $row['time_limit'] = '领取后 '.$time_limit.' 天失效';
+        }
+
+        return $this->toApi($row);
     }
     public function delete(Request $request)
     {

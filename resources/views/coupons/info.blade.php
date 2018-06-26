@@ -6,30 +6,8 @@
             <h3 class="panel-title">优惠券信息</h3>
         </div>
         <div class="panel-body">
-            <form class="form-horizontal">
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">优惠券编号</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static">xxxx</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-2 control-label">标题</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static">测试标题</p>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="" class="col-sm-2 control-label">库存</label>
-                    <div class="col-sm-10">
-                        <p class="form-control-static col-sm-2">123</p>
-                        <div class="col-sm-10 form-inline">
-                            <input type="text" class="form-control input-sm">
-                            <button class="btn btn-xs btn-success" type="button">增加</button>
-                            <button class="btn btn-xs btn-danger" type="button">减少</button>
-                        </div>
-                    </div>
-                </div>
+            <form class="form-horizontal" id="info">
+
             </form>
         </div>
         <div class="panel-heading">
@@ -100,4 +78,29 @@
     </div>
 @stop
 @section('footer')
+    <script>
+        getInfo();
+        function getInfo()
+        {
+            let html = '<div class="form-group"><label class="col-sm-2 control-label">优惠券编号</label><div class="col-sm-10"><p class="form-control-static">[id]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">标题</label><div class="col-sm-10"><p class="form-control-static">[title]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">使用期限</label><div class="col-sm-10"><p class="form-control-static">[time]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">折扣</label><div class="col-sm-10"><p class="form-control-static">[discount]</p></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">优惠券介绍</label><div class="col-sm-10"><textarea name="introduce" id="introduce" class="layui-textarea">[introduce]</textarea></div><div class="col-sm-10 col-sm-offset-2"><button class="btn btn-xs btn-info" type="button">修改</button></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">库存</label><div class="col-sm-10"><p class="form-control-static col-sm-2">[stock]</p><div class="col-sm-10 form-inline"><input type="text" class="form-control input-sm"><button class="btn btn-xs btn-success" type="button">增加</button><button class="btn btn-xs btn-danger" type="button">减少</button></div></div></div>';
+
+            $.ajax({
+                url : '{{ url("api/coupon/info",$id) }}',
+                type : 'get',
+                dataType :'json',
+                success(res)
+                {
+                    html = html.replace('[id]',res.id).replace('[title]',res.title).replace('[time]',res.time_limit).replace('[discount]',res.discount).replace('[introduce]',res.describes).replace('[stock]',res.stock);
+                    $('#info').html(html);
+
+                    layui.use(['layedit'],function(){
+                        let introduce = layui.layedit ;
+                        let content = introduce.build('introduce',{
+                            hideTool:['face','image']
+                        });
+                    });
+                }
+            })
+        }
+    </script>
 @stop

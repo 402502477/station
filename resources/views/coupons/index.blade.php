@@ -143,9 +143,8 @@
                             '<td>'+data[i].time_limit+'</td>' +
                             '<td>'+data[i].discount+'</td>' +
                             '<td>'+data[i].stock+'</td>' +
-                            '<td><span class="label '+ label_color[data[i].status] +'" onclick="changeStatus(this)">'+data[i].status_text+'</span></td>' +
-                            '<td><a class="btn btn-primary btn-xs" data-id="'+data[i].id+'">信息</a> '+
-                            '<button class="btn btn-success btn-xs" data-id="'+data[i].id+'">确认</button> ' +
+                            '<td><span class="label '+ label_color[data[i].status] +'">'+data[i].status_text+'</span></td>' +
+                            '<td><button class="btn btn-primary btn-xs" onclick="navigateTo(this)">信息</button> '+
                             '<button class="btn btn-danger btn-xs" onclick="onDelete(this)" data-id="'+data[i].id+'">删除</button> ' +
                             '</td>' +
                             '</tr>';
@@ -175,6 +174,11 @@
                     });
                 }
             })
+        }
+        function navigateTo(obj)
+        {
+            let id = $(obj).parents('tr').data('id');
+            window.location = "{{ url('Manages/coupons/info') }}/" + id;
         }
     </script>
 @stop
