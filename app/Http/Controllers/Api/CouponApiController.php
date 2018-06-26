@@ -70,6 +70,35 @@ class CouponApiController extends CommonController
 
         return $this->toApi($row);
     }
+    public function stock(Request $request)
+    {
+        $num = $request -> input('num');
+        $type = $request -> input('type');
+        $id = $request -> input('id');
+
+        if(in_array('',[$num,$type,$id])) return $this->toApi(['code'=> 0 ,'msg' =>'参数错误，请重试！']);
+        $row = Coupon::find($id);
+        $extend = json_decode($row->extend,true);
+        if($type == 'plus')
+        {
+            $extend['stock'] = $extend['stock'] + $num;
+        }
+        if($type == 'down')
+        {
+            $extend['stock'] = $extend['stock'] - $num;
+        }
+        if($extend['stock'] < 0)
+        {
+            return $this->toApi(['code'=> 0 ,'msg' => '库存无法改变为负数！']);
+        }
+        $row -> extend = json_encode($extend);
+        $res = $row -> save();
+        if($res)
+        {
+            return $this -> toApi(['code' => 1,'msg' => '库存改变成功！']);
+        }
+        return $this -> toApi(['code' => 0,'msg' => '库存改变失败！']);
+    }
     public function delete(Request $request)
     {
         $id = $request -> input('id','');
