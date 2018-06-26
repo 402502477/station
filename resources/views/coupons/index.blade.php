@@ -17,7 +17,7 @@
                             </select>
                         </div>
                         <a href="{{ url('Manages/coupons/create') }}" class="btn btn-primary btn-sm" type="button">添加</a>
-                        <button class="btn btn-danger btn-sm" type="button">批量删除</button>
+                        <button class="btn btn-danger btn-sm batchHandle" type="button" data-type="delete">批量删除</button>
                     </div>
                     <div class="col-sm-6 text-right">
                         <div class="form-group">
@@ -62,7 +62,9 @@
 @section('footer')
     <script>
         getList();
-        let take = null; //全局化页面数据显示长度
+        let take = 10; //全局化页面数据显示长度
+        let search = null;
+        let keywords = null;
 
         //切换页面数据长度
         $('select[name=length]').change(function(){
@@ -74,8 +76,8 @@
 
         //搜索操作
         $('button[name=searching]').click(function(){
-            let search = $('select[name=search]').val();
-            let keywords = $('input[name=keywords]').val();
+            search = $('select[name=search]').val();
+            keywords = $('input[name=keywords]').val();
 
             if(!search || !keywords)
             {
@@ -87,6 +89,31 @@
                 search : search,
                 keywords : keywords
             });
+        });
+        //批量删除
+        $('.batchHandle').click(function(){
+            let data = app.getCheckId();
+            if(data.length)
+            {
+                $.ajax({
+                    url:'{{ url('api/coupon/delete') }}',
+                    type :'post',
+                    data:{
+                        id : data
+                    },
+                    dataType:'json',
+                    success(r)
+                    {
+                        if(r.code)
+                        {
+                            return app.alert({content:r.msg,onSure(){getList({take : take,search : search,keywords : keywords})}})
+                        }
+                        return app.alert({content:r.msg});
+                    }
+                })
+                return;
+            }
+            return app.alert({content:'请先选择需要删除的项目！'})
         });
         //删除信息
         function onDelete(obj)
@@ -134,8 +161,8 @@
                     for(let i in data)
                     {
                         html += '<tr data-id="'+data[i].id+'"><td>' +
-                            '<label class="fancy-checkbox" data-id="'+data[i].id+'">' +
-                            '<input type="checkbox">' +
+                            '<label class="fancy-checkbox" >' +
+                            '<input type="checkbox" data-id="'+data[i].id+'">' +
                             '<span></span>' +
                             '</label></td>' +
                             '<td>'+data[i].id+'</td>' +

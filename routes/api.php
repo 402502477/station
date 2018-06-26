@@ -23,5 +23,6 @@ Route::group(['prefix' => 'coupon'],function(){
     Route::any('get','Api\CouponApiController@get');
     Route::post('stock','Api\CouponApiController@stock');
     Route::get('info/{id}','Api\CouponApiController@info');
+    Route::get('status','Api\CouponApiController@status');
     Route::post('delete','Api\CouponApiController@delete');
 });

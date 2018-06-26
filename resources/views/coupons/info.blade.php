@@ -82,7 +82,7 @@
         getInfo();
         function getInfo()
         {
-            let html = '<div class="form-group"><label class="col-sm-2 control-label">优惠券编号</label><div class="col-sm-10"><p class="form-control-static">[id]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">标题</label><div class="col-sm-10"><p class="form-control-static">[title]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">使用期限</label><div class="col-sm-10"><p class="form-control-static">[time]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">折扣</label><div class="col-sm-10"><p class="form-control-static">[discount]</p></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">优惠券介绍</label><div class="col-sm-10"><textarea name="introduce" id="introduce" class="layui-textarea">[introduce]</textarea></div><div class="col-sm-10 col-sm-offset-2"><button class="btn btn-xs btn-info" type="button">修改</button></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">库存</label><div class="col-sm-10"><p class="form-control-static col-sm-2">[stock]</p><div class="col-sm-10 form-inline"><input type="number" class="form-control input-sm" name="num"><button class="btn btn-xs btn-success change_stock" type="button" data-type="plus">增加</button><button class="btn btn-xs btn-danger change_stock" type="button" data-type="down">减少</button></div></div></div>';
+            let html = '<div class="form-group"><label class="col-sm-2 control-label">优惠券编号</label><div class="col-sm-10"><p class="form-control-static">[id]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">标题</label><div class="col-sm-10"><p class="form-control-static">[title]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">使用期限</label><div class="col-sm-10"><p class="form-control-static">[time]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">折扣</label><div class="col-sm-10"><p class="form-control-static">[discount]</p></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">优惠券介绍</label><div class="col-sm-10"><p class="form-control-static">[introduce]</p></div><div class="col-sm-10 col-sm-offset-2"></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">库存</label><div class="col-sm-10"><p class="form-control-static col-sm-2">[stock]</p><div class="col-sm-10 form-inline"><input type="number" class="form-control input-sm" name="num"> <button class="btn btn-xs btn-success change_stock" type="button" data-type="plus">增加</button> <button class="btn btn-xs btn-danger change_stock" type="button" data-type="down">减少</button></div></div></div><div class="form-group"><label class="col-sm-2 control-label">状态切换</label><div class="col-sm-10"><p class="form-control-static">[button]</p></div></div>';
 
             $.ajax({
                 url : '{{ url("api/coupon/info",$id) }}',
@@ -94,50 +94,79 @@
                 },
                 success(res)
                 {
-                    html = html.replace('[id]',res.id).replace('[title]',res.title).replace('[time]',res.time_limit).replace('[discount]',res.discount).replace('[introduce]',res.describes).replace('[stock]',res.stock);
+                    let button = '';
+                    if(res.status === 1)
+                    {
+                        button = '<button type="button" class="btn btn-warning btn-sm change_status">关闭</button>'
+                    }
+                    if(res.status === 2)
+                    {
+                        button = '<button type="button" class="btn btn-success btn-sm change_status">开启</button>'
+                    }
+                    html = html.replace('[id]',res.id).replace('[title]',res.title).replace('[time]',res.time_limit).replace('[discount]',res.discount).replace('[introduce]',res.describes).replace('[stock]',res.stock).replace('[button]',button);
                     $('#info').html(html);
 
-                    layui.use(['layedit'],function(){
-                        let introduce = layui.layedit ;
-                        let content = introduce.build('introduce',{
-                            hideTool:['face','image']
-                        });
-                    });
                     app.hidePreLoading();
 
+                    //改变库存
                     $('.change_stock').click(function(){
                         let num = $('input[name=num]').val();
                         let type = $(this).data('type');
-                        if(num)
-                        {
-                            $.ajax({
-                                url : "{{ url('api/coupon/stock') }}",
-                                type : 'post',
-                                data:{
-                                    num:num ,
-                                    type:type,
-                                    id : res.id
-                                },
-                                dataType:'json',
-                                success(r)
+                        $.ajax({
+                            url : "{{ url('api/coupon/stock') }}",
+                            type : 'post',
+                            data:{
+                                num:num ,
+                                type:type,
+                                id : res.id
+                            },
+                            dataType:'json',
+                            success(r)
+                            {
+                                if(r.code)
                                 {
-                                    if(r.code)
-                                    {
-                                        app.alert({
-                                            content:r.msg,
-                                            onSure(){
-                                                getInfo()
-                                            }
-                                        });
-                                        return;
-                                    }
-                                    return app.alert({content:r.msg});
+                                    app.alert({
+                                        content:r.msg,
+                                        onSure(){
+                                            getInfo()
+                                        }
+                                    });
+                                    return;
                                 }
-                            });
-                            return;
-                        }
-                        app.alert({content:'请输入需要改变库存的数量'});
-                    })
+                                return app.alert({content:r.msg});
+                            }
+                        });
+                        return null;
+                    });
+
+                    //改变状态
+                    $('.change_status').click(function(){
+                        let obj = $(this);
+                        $.ajax({
+                            url : "{{ url('api/coupon/status') }}",
+                            data:{
+                                id : res.id
+                            },
+                            dataType:'json',
+                            beforeSend(){
+                                obj.html('<i class="fa fa-refresh fa-spin"></i> 稍等...').attr('disabled','disabled');
+                            },
+                            success(r)
+                            {
+                                if(r.code)
+                                {
+                                    app.alert({content:r.msg});
+                                    let data = {
+                                        1:{remove : 'btn-success',add:'btn-warning',html:'关闭'},
+                                        2:{remove : 'btn-warning',add:'btn-success',html:'开启'},
+                                    };
+                                    obj.html(data[r.info.status].html).attr('disabled',false).addClass(data[r.info.status].add).removeClass(data[r.info.status].remove);
+                                    return;
+                                }
+                                return app.alert({content:r.msg});
+                            }
+                        });
+                    });
                 }
             })
         }

@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class CouponApiController extends CommonController
 {
-    protected $status = ['已删除','正常','过期','无库存'];
+    protected $status = ['已删除','正常','关闭','无库存'];
     protected $discount_type = [ 1 => '￥', 2 => '%'];
 
     public function get(Request $request)
@@ -98,6 +98,20 @@ class CouponApiController extends CommonController
             return $this -> toApi(['code' => 1,'msg' => '库存改变成功！']);
         }
         return $this -> toApi(['code' => 0,'msg' => '库存改变失败！']);
+    }
+    public function status(Request $request)
+    {
+        $type = [1=>2 , 2=>1];
+        $id = $request -> input('id');
+        $row = Coupon::find($id);
+        $row -> status = $type[$row->status];
+        $res = $row -> save();
+        if($res)
+        {
+            return $this->toApi(['code' => 1,'msg'=> '修改状态成功!','info'=>Coupon::find($id)]);
+        }
+        return $this->toApi(['code' => 0,'msg'=> '修改状态失败!']);
+
     }
     public function delete(Request $request)
     {
