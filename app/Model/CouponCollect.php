@@ -5,11 +5,11 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Member extends Model
+class CouponCollect extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'member';
+    protected $table = 'coupon_collect';
 
     protected $guarded = [];
 
@@ -24,14 +24,24 @@ class Member extends Model
     {
         return date('Y-m-d H:i');
     }
+
     public function freshTimestamp()
     {
         return time();
     }
+
     public function fromDateTime($value)
     {
         return $value;
     }
 
+    public function member()
+    {
+        return $this->belongsTo('App\Model\Member', 'mid');
+    }
 
+    public function coupon()
+    {
+        return $this->belongsTo('App\Model\Coupon','cid');
+    }
 }

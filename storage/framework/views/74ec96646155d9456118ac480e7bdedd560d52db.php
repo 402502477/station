@@ -1,9 +1,8 @@
-@extends('layouts.layout')
-@section('title','订单管理')
-@section('content')
+<?php $__env->startSection('title','用户管理'); ?>
+<?php $__env->startSection('content'); ?>
     <div class="panel">
         <div class="panel-heading">
-            <h3 class="panel-title">订单管理</h3>
+            <h3 class="panel-title">用户管理</h3>
         </div>
         <div class="panel-body">
             <div class="handler clearfix">
@@ -16,14 +15,14 @@
                                 <option value="50">显示50条</option>
                             </select>
                         </div>
-                        {{--<a href="{{ url('Manages/coupons/create') }}" class="btn btn-primary btn-sm" type="button">添加</a>--}}
-                        <button class="btn btn-danger btn-sm batchHandle" type="button" data-type="delete">批量删除</button>
                     </div>
                     <div class="col-sm-6 text-right">
                         <div class="form-group">
                             <select class="form-control input-sm" name="search">
                                 <option value="">请选择搜索类型</option>
-                                <option value="id">订单编号</option>
+                                <option value="id">用户编号</option>
+                                <option value="username">姓名</option>
+                                <option value="contact">手机号</option>
                             </select>
                             <input type="text" class="form-control input-sm"  name="keywords">
                             <button class="btn btn-default btn-sm" type="button" name="searching">搜索</button>
@@ -31,49 +30,33 @@
                     </div>
                 </form>
             </div>
-            <table class="table table-hover orders_list">
+            <table class="table table-hover member_list">
                 <thead>
-                    <tr>
-                        <th>
-                            <label class="fancy-checkbox full-switch">
-                                <input type="checkbox">
-                                <span></span>
-                            </label>
-                        </th>
-                        <th>ID</th>
-                        <th>订单编号</th>
-                        <th>用户ID</th>
-                        <th>用户姓名</th>
-                        <th>总金额</th>
-                        <th>支付金额</th>
-                        <th>创建时间</th>
-                        <th>订单状态</th>
-                        <th>操作</th>
-                    </tr>
+                <tr>
+                    <th>用户编号</th>
+                    <th>姓名</th>
+                    <th>联系方式</th>
+                    <th>等级</th>
+                    <th>加入时间</th>
+                    <th>状态</th>
+                    <th>操作</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>[ID]</td>
-                        <td>[NUMBER]</td>
-                        <td>[MID]</td>
-                        <td>[USERNAME]</td>
-                        <td>[TOTAL]</td>
-                        <td>[ACTUAL]</td>
-                        <td>[TIME]</td>
-                        <td>[STATUS]</td>
-                        <td></td>
-                    </tr>
+
                 </tbody>
             </table>
             <ul class="pagination" id="pagination">
             </ul>
         </div>
     </div>
-@stop
-@section('footer')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('footer'); ?>
     <script>
         getList();
-        let take = 10; //全局化页面数据显示长度
+
+        //全局化页面数据
+        let take = 10;
         let search = null;
         let keywords = null;
 
@@ -103,67 +86,11 @@
                 keywords : keywords
             });
         });
-        //批量删除
-        $('.batchHandle').click(function(){
-            let data = app.getCheckId();
-            if(data.length)
-            {
-                $.ajax({
-                    url:'{{ url('api/order/delete') }}',
-                    type :'post',
-                    data:{
-                        id : data
-                    },
-                    dataType:'json',
-                    success(r)
-                    {
-                        if(r.code)
-                        {
-                            return app.alert({content:r.msg,onSure(){getList({take : take,search : search,keywords : keywords})}})
-                        }
-                        return app.alert({content:r.msg});
-                    }
-                });
-                return;
-            }
-            return app.alert({content:'请先选择需要删除的项目！'})
-        });
-        //删除信息
-        function onDelete(obj)
-        {
-            app.alert({
-                content:'确定要删除此条记录么？',
-                showCancel : true,
-                onSure()
-                {
-                    let id = $(obj).data('id');
-                    $.ajax({
-                        url : '{{url("api/order/delete")}}',
-                        data : {
-                            id : id
-                        },
-                        type : 'post',
-                        dataType : 'json',
-                        success(r)
-                        {
-                            if(r.code)
-                            {
-                                $(obj).parents('tr').remove();
-                                app.layOpen(r.msg,1);
-                                return;
-                            }
-                            app.layOpen(r.msg,2);
-                        }
-                    })
-                }
-            });
-
-        }
         //获取列表方法
         function getList(dt,method)
         {
             app.getLists({
-                url : "{{ url('api/order/get') }}",
+                url : "<?php echo e(url('api/member/get')); ?>",
                 data : dt,
                 method : method || 'post',
                 success (r)
@@ -173,9 +100,18 @@
                     let html = '';
                     for(let i in data)
                     {
-                        html += '';
+                        let url = "<?php echo e(url('Manages/members/detail')); ?>/"+data[i].id ;
+                        html += '<tr>' +
+                            '<td>'+data[i].id+'</td>' +
+                            '<td>'+data[i].username+'</td>' +
+                            '<td>'+data[i].contact+'</td>' +
+                            '<td>'+data[i].create_at+'</td>' +
+                            '<td><label class="label label-info">'+data[i].level_text+'</label></td>' +
+                            '<td><label class="label '+label_color[data[i].status]+'">'+data[i].status_text+'</label></td>' +
+                            '<td><a class="btn btn-info btn-sm" href="'+url+'">信息</a></td>' +
+                            '</tr>';
                     }
-                    $('.coupon_list tbody').html(html);
+                    $('.member_list tbody').html(html);
 
 
                     layui.use('laypage', function(){
@@ -202,4 +138,5 @@
             })
         }
     </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

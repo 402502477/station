@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCouponCollectTable extends Migration
+class CreateLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,18 @@ class CreateCouponCollectTable extends Migration
      */
     public function up()
     {
-        Schema::create('coupon_collect', function (Blueprint $table) {
+        Schema::create('logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('number',255)->comment('优惠券编码 CN20170516210512 + cid + rand4 ');
-            $table->char('uid',29)->comment('用户唯一值');
-            $table->unsignedInteger('mid')->comment('用户id');
-            $table->unsignedInteger('cid')->comment('优惠券id');
-
+            $table->char('log_id',22)->unique()->comment('日志编号 LG20180619122454123456');
+            $table->string('title',255)->comment('日志描述');
+            $table->text('info')->nullable()->comment('详细信息');
             $table->text('extend')->nullable()->comment('扩展字段');
+            $table->unsignedTinyInteger('type')->default(1)->comment('日志类型 1日常 2警告 3危险');
+
             $table->unsignedTinyInteger('status')->nullable()->default(1);
             $table->unsignedInteger('create_at')->nullable();
             $table->unsignedInteger('update_at')->nullable();
             $table->unsignedInteger('delete_at')->nullable();
-
-            $table->index(['uid']);
-            $table->unique('number');
         });
     }
 
@@ -38,6 +35,6 @@ class CreateCouponCollectTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coupon_collect');
+        Schema::dropIfExists('logs');
     }
 }

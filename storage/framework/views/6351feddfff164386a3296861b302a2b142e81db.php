@@ -1,6 +1,5 @@
-@extends('layouts.layout')
-@section('title','优惠券信息')
-@section('content')
+<?php $__env->startSection('title','优惠券信息'); ?>
+<?php $__env->startSection('content'); ?>
     <div class="panel">
         <div class="panel-heading">
             <h3 class="panel-title">优惠券信息</h3>
@@ -62,8 +61,8 @@
             </ul>
         </div>
     </div>
-@stop
-@section('footer')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('footer'); ?>
     <script>
         let skip = 0;
         let take = 10;
@@ -82,7 +81,7 @@
                 '<span class="label label-danger">禁用</span>',
             ];
             $.ajax({
-                url :  '/api/coupon/collect/get/{{ $id }}',
+                url :  '/api/coupon/collect/get/<?php echo e($id); ?>',
                 type : 'post',
                 data : {
                     search : search|| null,
@@ -152,7 +151,7 @@
             let html = '<div class="form-group"><label class="col-sm-2 control-label">优惠券编号</label><div class="col-sm-10"><p class="form-control-static">[id]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">标题</label><div class="col-sm-10"><p class="form-control-static">[title]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">发放时间</label><div class="col-sm-10"><p class="form-control-static">[send_type]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">使用期限</label><div class="col-sm-10"><p class="form-control-static">[time]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">折扣</label><div class="col-sm-10"><p class="form-control-static">[discount]</p></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">优惠券介绍</label><div class="col-sm-10"><p class="form-control-static">[introduce]</p></div><div class="col-sm-10 col-sm-offset-2"></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">库存</label><div class="col-sm-10"><p class="form-control-static col-sm-2">[stock]</p><div class="col-sm-10 form-inline"><input type="number" class="form-control input-sm" name="num"> <button class="btn btn-xs btn-success change_stock" type="button" data-type="plus">增加</button> <button class="btn btn-xs btn-danger change_stock" type="button" data-type="down">减少</button></div></div></div><div class="form-group"><label class="col-sm-2 control-label">状态切换</label><div class="col-sm-10"><p class="form-control-static">[button]</p></div></div>';
 
             $.ajax({
-                url : '{{ url("api/coupon/info",$id) }}',
+                url : '<?php echo e(url("api/coupon/info",$id)); ?>',
                 type : 'get',
                 dataType :'json',
                 beforeSend()
@@ -180,7 +179,7 @@
                         let num = $('input[name=num]').val();
                         let type = $(this).data('type');
                         $.ajax({
-                            url : "{{ url('api/coupon/stock') }}",
+                            url : "<?php echo e(url('api/coupon/stock')); ?>",
                             type : 'post',
                             data:{
                                 num:num ,
@@ -210,7 +209,7 @@
                     $('.change_status').click(function(){
                         let obj = $(this);
                         $.ajax({
-                            url : "{{ url('api/coupon/status') }}",
+                            url : "<?php echo e(url('api/coupon/status')); ?>",
                             data:{
                                 id : res.id
                             },
@@ -238,4 +237,5 @@
             })
         }
     </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

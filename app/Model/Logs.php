@@ -5,11 +5,11 @@ namespace App\Model;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Member extends Model
+class Logs extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'member';
+    protected $table = 'logs';
 
     protected $guarded = [];
 
@@ -32,6 +32,4 @@ class Member extends Model
     {
         return $value;
     }
-
-
 }

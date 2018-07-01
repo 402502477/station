@@ -1,6 +1,5 @@
-@extends('layouts.layout')
-@section('title','优惠券管理')
-@section('content')
+<?php $__env->startSection('title','优惠券管理'); ?>
+<?php $__env->startSection('content'); ?>
     <div class="panel">
         <div class="panel-heading">
             <h3 class="panel-title">优惠券管理</h3>
@@ -16,7 +15,7 @@
                                 <option value="50">显示50条</option>
                             </select>
                         </div>
-                        <a href="{{ url('Manages/coupons/create') }}" class="btn btn-primary btn-sm" type="button">添加</a>
+                        <a href="<?php echo e(url('Manages/coupons/create')); ?>" class="btn btn-primary btn-sm" type="button">添加</a>
                         <button class="btn btn-danger btn-sm batchHandle" type="button" data-type="delete">批量删除</button>
                     </div>
                     <div class="col-sm-6 text-right">
@@ -58,8 +57,8 @@
             </ul>
         </div>
     </div>
-@stop
-@section('footer')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('footer'); ?>
     <script>
         getList();
         let take = 10; //全局化页面数据显示长度
@@ -98,7 +97,7 @@
             if(data.length)
             {
                 $.ajax({
-                    url:'{{ url('api/coupon/delete') }}',
+                    url:'<?php echo e(url('api/coupon/delete')); ?>',
                     type :'post',
                     data:{
                         id : data
@@ -127,7 +126,7 @@
                 {
                     let id = $(obj).data('id');
                     $.ajax({
-                        url : '{{url("api/coupon/delete")}}',
+                        url : '<?php echo e(url("api/coupon/delete")); ?>',
                         data : {
                             id : id
                         },
@@ -152,7 +151,7 @@
         function getList(dt,method)
         {
             app.getLists({
-                url : "{{ url('api/coupon/get') }}",
+                url : "<?php echo e(url('api/coupon/get')); ?>",
                 data : dt,
                 method : method || 'post',
                 success (r)
@@ -207,7 +206,8 @@
         function navigateTo(obj)
         {
             let id = $(obj).parents('tr').data('id');
-            window.location = "{{ url('Manages/coupons/info') }}/" + id;
+            window.location = "<?php echo e(url('Manages/coupons/info')); ?>/" + id;
         }
     </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

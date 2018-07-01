@@ -1,6 +1,5 @@
-@extends('layouts.layout')
-@section('title','用户信息')
-@section('content')
+<?php $__env->startSection('title','用户信息'); ?>
+<?php $__env->startSection('content'); ?>
     <div class="panel panel-profile">
         <div class="clearfix">
             <!-- LEFT COLUMN -->
@@ -9,9 +8,9 @@
                 <div class="profile-header">
                     <div class="overlay"></div>
                     <div class="profile-main">
-                        <img src="{{ $info['info']['headimgurl'] }}" class="img-circle" alt="Avatar">
-                        <h3 class="name">{{ $info['username'] }}</h3>
-                        {{--<span class="online-status status-available">Available</span>--}}
+                        <img src="<?php echo e($info['info']['headimgurl']); ?>" class="img-circle" alt="Avatar">
+                        <h3 class="name"><?php echo e($info['username']); ?></h3>
+                        
                     </div>
                     <div class="profile-stat">
                         <div class="row">
@@ -33,13 +32,13 @@
                     <div class="profile-info">
                         <h4 class="heading">基本信息</h4>
                         <ul class="list-unstyled list-justify">
-                            <li>等级 <span>{{ $info['level_text'] }}</span></li>
-                            <li>手机号 <span>{{ $info['contact'] }}</span></li>
-                            <li>性别 <span>{{ $info['gender'] }}</span></li>
-                            <li>加入时间 <span>{{ $info['create_at'] }}</span></li>
+                            <li>等级 <span><?php echo e($info['level_text']); ?></span></li>
+                            <li>手机号 <span><?php echo e($info['contact']); ?></span></li>
+                            <li>性别 <span><?php echo e($info['gender']); ?></span></li>
+                            <li>加入时间 <span><?php echo e($info['create_at']); ?></span></li>
                         </ul>
                     </div>
-                    @if($info['receipt_info'])
+                    <?php if($info['receipt_info']): ?>
                         <div class="profile-info">
                             <h4 class="heading">发票信息</h4>
                             <ul class="list-unstyled list-justify">
@@ -47,12 +46,8 @@
                                 <li>发票信息 </li>
                             </ul>
                         </div>
-                    @endif
-                    {{--<div class="profile-info">
-                        <h4 class="heading">About</h4>
-                        <p>Interactively fashion excellent information after distinctive outsourcing.</p>
-                    </div>
-                    <div class="text-center"><a href="#" class="btn btn-primary">Edit Profile</a></div>--}}
+                    <?php endif; ?>
+                    
                 </div>
                 <!-- END PROFILE DETAIL -->
             </div>
@@ -102,32 +97,13 @@
                 <!-- TABBED CONTENT -->
                 <div class="custom-tabs-line tabs-line-bottom left-aligned">
                     <ul class="nav" role="tablist">
+                        
                         <li class="active"><a href="#coupon" role="tab" data-toggle="tab" aria-expanded="">优惠券</a></li>
                         <li class=""><a href="#order" role="tab" data-toggle="tab" aria-expanded="">订单记录</a></li>
                     </ul>
                 </div>
                 <div class="tab-content">
-                    {{--<div class="tab-pane fade in " id="step">
-                        <ul class="list-unstyled activity-timeline">
-                            <li>
-                                <i class="fa fa-comment activity-icon"></i>
-                                <p>Commented on post <a href="#">Prototyping</a> <span class="timestamp">2 minutes ago</span></p>
-                            </li>
-                            <li>
-                                <i class="fa fa-cloud-upload activity-icon"></i>
-                                <p>Uploaded new file <a href="#">Proposal.docx</a> to project <a href="#">New Year Campaign</a> <span class="timestamp">7 hours ago</span></p>
-                            </li>
-                            <li>
-                                <i class="fa fa-plus activity-icon"></i>
-                                <p>Added <a href="#">Martin</a> and <a href="#">3 others colleagues</a> to project repository <span class="timestamp">Yesterday</span></p>
-                            </li>
-                            <li>
-                                <i class="fa fa-check activity-icon"></i>
-                                <p>Finished 80% of all <a href="#">assigned tasks</a> <span class="timestamp">1 day ago</span></p>
-                            </li>
-                        </ul>
-                        <div class="margin-top-30 text-center"><a href="#" class="btn btn-default">查看全部</a></div>
-                    </div>--}}
+                    
                     <div class="tab-pane fade in active" id="coupon">
                         <div class="table-responsive">
                             <table class="table project-table">
@@ -187,8 +163,8 @@
             <!-- END RIGHT COLUMN -->
         </div>
     </div>
-@stop
-@section('footer')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('footer'); ?>
     <script>
         let coupon_html = $('#coupon tbody').html();
         let order_html = $('#order tbody').html();
@@ -204,12 +180,12 @@
                 '<span class="label label-danger">禁用</span>',
             ];
             $.ajax({
-                url :  '{{ url("api/coupon/collect/get") }}',
+                url :  '<?php echo e(url("api/coupon/collect/get")); ?>',
                 type : 'post',
                 data : {
                     skip : skip|| null,
                     take : take|| null,
-                    mid : '{{ $mid }}'
+                    mid : '<?php echo e($mid); ?>'
                 },
                 dataType : 'json',
                 beforeSend()
@@ -254,4 +230,5 @@
             });
         }
     </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

@@ -12,6 +12,7 @@ class CouponApiController extends CommonController
 {
     protected $status = ['已删除','正常','关闭','无库存'];
     protected $discount_type = [ 1 => '￥', 2 => '%'];
+    protected $send_type = [ 1 => '完成注册时发放' ,2 => '完成订单时发放' ];
 
     public function get(Request $request)
     {
@@ -25,15 +26,13 @@ class CouponApiController extends CommonController
 
         $skip = $request -> input('skip',0);
         $take = $request -> input('take',10);
-        $select = ['id','title','promotions_detail','time_limit','status','create_at','extend'];
+        $select = ['id','title','promotions_detail','time_limit','status','create_at','extend','stock','send_type'];
 
         $datum = Coupon::where($wh)->select($select)->orderBy('create_at','desc')->skip($skip)->take($take)->get();
         foreach ($datum as &$vl)
         {
-            $extend = json_decode($vl['extend'],true);
             $promotions = json_decode($vl['promotions_detail'],true);
             $time_limit = json_decode($vl['time_limit'],true);
-            $vl['stock'] = $extend['stock'];
             $vl['discount'] = '-'.$promotions['point'].$this->discount_type[$promotions['type']];
             $vl['status_text'] = $this->status[$vl['status']];
             if(is_array($time_limit))
@@ -56,9 +55,9 @@ class CouponApiController extends CommonController
         $row = Coupon::where('id',$id)->first();
         $extend = json_decode($row['extend'],true);
         $row['extend'] = $extend;
+        $row['send_type_text'] = $this->send_type[$row['send_type']];
         $promotions = json_decode($row['promotions_detail'],true);
         $time_limit = json_decode($row['time_limit'],true);
-        $row['stock'] = $extend['stock'];
         $row['discount'] = '-'.$promotions['point'].$this->discount_type[$promotions['type']];
         $row['status_text'] = $this->status[$row['status']];
         if(is_array($time_limit))
@@ -78,26 +77,24 @@ class CouponApiController extends CommonController
 
         if(in_array('',[$num,$type,$id])) return $this->toApi(['code'=> 0 ,'msg' =>'参数错误，请重试！']);
         $row = Coupon::find($id);
-        $extend = json_decode($row->extend,true);
         if($type == 'plus')
         {
-            $extend['stock'] = $extend['stock'] + $num;
+            $row->stock += $num;
         }
         if($type == 'down')
         {
-            $extend['stock'] = $extend['stock'] - $num;
+            $row->stock -= $num;
         }
-        if($extend['stock'] < 0)
+        if($row['stock'] < 0)
         {
-            return $this->toApi(['code'=> 0 ,'msg' => '库存无法改变为负数！']);
+            return ['code'=> 0 ,'msg' => '库存无法改变为负数！'];
         }
-        $row -> extend = json_encode($extend);
         $res = $row -> save();
         if($res)
         {
-            return $this -> toApi(['code' => 1,'msg' => '库存改变成功！']);
+            return ['code' => 1,'msg' => '库存改变成功！'];
         }
-        return $this -> toApi(['code' => 0,'msg' => '库存改变失败！']);
+        return ['code' => 0,'msg' => '库存改变失败！'];
     }
     public function status(Request $request)
     {
@@ -133,7 +130,7 @@ class CouponApiController extends CommonController
 
         Validator::make($data,[
             'title' => 'required|string|max:20|unique:coupon',
-            'type' => 'required',
+            'send_type' => 'required',
             'deadline_type' => 'required',
             'deadline' => 'required',
             'discount_type' => 'required',
@@ -146,6 +143,7 @@ class CouponApiController extends CommonController
 
         $create = [
             'title' => $data['title'],
+            'send_type' => $data['send_type'],
             'describes' => $data['introduce'],
             'promotions_detail' => $this->toJson([
                 'type' => $data['discount_type'],
@@ -153,6 +151,7 @@ class CouponApiController extends CommonController
             ]),
             'time_limit' => $this->toJson($data['deadline']),
             'extend' => $this->toJson($data),
+            'stock' => $data['stock'],
             'status' => 1
         ];
         $res = Coupon::create($create);

@@ -1,12 +1,11 @@
-@extends('layouts.layout')
-@section('title','添加优惠券')
-@section('content')
+<?php $__env->startSection('title','添加优惠券'); ?>
+<?php $__env->startSection('content'); ?>
     <div class="panel">
         <div class="panel-heading">
             <h3 class="panel-title">添加优惠券</h3>
         </div>
         <div class="panel-body">
-            <form class="layui-form layui-form-pane" name="create_coupon" method="post" action="{{ url('api/coupon/create') }}">
+            <form class="layui-form layui-form-pane" name="create_coupon" method="post" action="<?php echo e(url('api/coupon/create')); ?>">
                 <div class="layui-form-item">
                     <span for="title" class="layui-form-label">标题</span>
                     <div class="layui-input-block">
@@ -88,8 +87,8 @@
             </form>
         </div>
     </div>
-@stop
-@section('footer')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('footer'); ?>
     <script>
         layui.use(['form', 'layedit', 'laydate','layer'], function(){
             let layer = layui.layer;
@@ -135,10 +134,11 @@
 
             form.on('submit(*)', function(data){
                 app.onSubmit('create_coupon',data.field,function(){
-                    window.location = '{{ url('/Manages/coupons/index') }}'
+                    window.location = '<?php echo e(url('/Manages/coupons/index')); ?>'
                 });
                 return false;
             });
         });
     </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>

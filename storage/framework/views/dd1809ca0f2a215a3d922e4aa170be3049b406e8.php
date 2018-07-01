@@ -1,9 +1,8 @@
-@extends('layouts.layout')
-@section('title','优惠券管理')
-@section('content')
+<?php $__env->startSection('title','订单管理'); ?>
+<?php $__env->startSection('content'); ?>
     <div class="panel">
         <div class="panel-heading">
-            <h3 class="panel-title">优惠券管理</h3>
+            <h3 class="panel-title">订单管理</h3>
         </div>
         <div class="panel-body">
             <div class="handler clearfix">
@@ -16,15 +15,14 @@
                                 <option value="50">显示50条</option>
                             </select>
                         </div>
-                        <a href="{{ url('Manages/coupons/create') }}" class="btn btn-primary btn-sm" type="button">添加</a>
+                        
                         <button class="btn btn-danger btn-sm batchHandle" type="button" data-type="delete">批量删除</button>
                     </div>
                     <div class="col-sm-6 text-right">
                         <div class="form-group">
                             <select class="form-control input-sm" name="search">
                                 <option value="">请选择搜索类型</option>
-                                <option value="id">优惠券ID</option>
-                                <option value="title">标题</option>
+                                <option value="id">订单编号</option>
                             </select>
                             <input type="text" class="form-control input-sm"  name="keywords">
                             <button class="btn btn-default btn-sm" type="button" name="searching">搜索</button>
@@ -32,7 +30,7 @@
                     </div>
                 </form>
             </div>
-            <table class="table table-hover coupon_list">
+            <table class="table table-hover orders_list">
                 <thead>
                 <tr>
                     <th>
@@ -41,12 +39,13 @@
                             <span></span>
                         </label>
                     </th>
-                    <th>优惠券ID</th>
-                    <th>标题</th>
-                    <th>使用时间</th>
-                    <th>折扣</th>
-                    <th>库存</th>
-                    <th>状态</th>
+                    <th>ID</th>
+                    <th>订单编号</th>
+                    <th>总金额</th>
+                    <th>支付金额</th>
+                    <th>创建时间</th>
+                    <th>订单状态</th>
+                    <th>用户姓名</th>
                     <th>操作</th>
                 </tr>
                 </thead>
@@ -58,8 +57,8 @@
             </ul>
         </div>
     </div>
-@stop
-@section('footer')
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('footer'); ?>
     <script>
         getList();
         let take = 10; //全局化页面数据显示长度
@@ -98,7 +97,7 @@
             if(data.length)
             {
                 $.ajax({
-                    url:'{{ url('api/coupon/delete') }}',
+                    url:'<?php echo e(url('api/order/delete')); ?>',
                     type :'post',
                     data:{
                         id : data
@@ -112,7 +111,7 @@
                         }
                         return app.alert({content:r.msg});
                     }
-                })
+                });
                 return;
             }
             return app.alert({content:'请先选择需要删除的项目！'})
@@ -127,7 +126,7 @@
                 {
                     let id = $(obj).data('id');
                     $.ajax({
-                        url : '{{url("api/coupon/delete")}}',
+                        url : '<?php echo e(url("api/order/delete")); ?>',
                         data : {
                             id : id
                         },
@@ -137,7 +136,7 @@
                         {
                             if(r.code)
                             {
-                                $(obj).parents('tr').remove()
+                                $(obj).parents('tr').remove();
                                 app.layOpen(r.msg,1);
                                 return;
                             }
@@ -152,7 +151,7 @@
         function getList(dt,method)
         {
             app.getLists({
-                url : "{{ url('api/coupon/get') }}",
+                url : "<?php echo e(url('api/order/get')); ?>",
                 data : dt,
                 method : method || 'post',
                 success (r)
@@ -162,21 +161,7 @@
                     let html = '';
                     for(let i in data)
                     {
-                        html += '<tr data-id="'+data[i].id+'"><td>' +
-                            '<label class="fancy-checkbox" >' +
-                            '<input type="checkbox" data-id="'+data[i].id+'">' +
-                            '<span></span>' +
-                            '</label></td>' +
-                            '<td>'+data[i].id+'</td>' +
-                            '<td>'+data[i].title+'</td>' +
-                            '<td>'+data[i].time_limit+'</td>' +
-                            '<td>'+data[i].discount+'</td>' +
-                            '<td>'+data[i].stock+'</td>' +
-                            '<td><span class="label '+ label_color[data[i].status] +'">'+data[i].status_text+'</span></td>' +
-                            '<td><button class="btn btn-primary btn-xs" onclick="navigateTo(this)">信息</button> '+
-                            '<button class="btn btn-danger btn-xs" onclick="onDelete(this)" data-id="'+data[i].id+'">删除</button> ' +
-                            '</td>' +
-                            '</tr>';
+                        html += '';
                     }
                     $('.coupon_list tbody').html(html);
 
@@ -204,10 +189,6 @@
                 }
             })
         }
-        function navigateTo(obj)
-        {
-            let id = $(obj).parents('tr').data('id');
-            window.location = "{{ url('Manages/coupons/info') }}/" + id;
-        }
     </script>
-@stop
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.layout', array_except(get_defined_vars(), array('__data', '__path')))->render(); ?>
