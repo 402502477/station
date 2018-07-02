@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 Route::group(['prefix' => 'member'],function(){
     Route::any('get','Api\MemberApiController@get');
-    Route::post('create','Api\MemberApiController@create');
+    Route::get('create','Api\MemberApiController@create');
 });
 Route::group(['prefix' => 'order'],function(){
     Route::any('get','Api\OrderApiController@get');
