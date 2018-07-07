@@ -12,17 +12,17 @@
     <div class="layui-card coupon">
         <div class="layui-card-header">我的优惠券</div>
         <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-            <ul class="layui-tab-title">
-                <li class="layui-this">未使用</li>
-                <li>已使用</li>
-                <li>已过期</li>
+            <ul class="layui-tab-title" id="switch_tab">
+                <li class="layui-this" data-status="1">未使用</li>
+                <li data-status="2">已使用</li>
+                <li data-status="3">已过期</li>
             </ul>
             <div class="layui-tab-content">
                 <div class="layui-tab-item layui-show">
                 </div>
-                <div class="layui-tab-item">
+                <div class="layui-tab-item" >
                 </div>
-                <div class="layui-tab-item">
+                <div class="layui-tab-item" >
                 </div>
             </div>
         </div>
@@ -56,42 +56,90 @@
 <script src="../layui/layui.js"></script>
 <script src="asset/js/app.js"></script>
 <script>
-    layui.use(['element','layer'], function(){
+    layui.use(['element','flow','layer'], function(){
+        //初始化全局数据
         let element = layui.element;
         let layer = layui.layer;
+        let flow = layui.flow;
+
+        let skip = 0;
+        let take = 10;
+        let status = 1;
+
         let nothing = $('.nothing_html').html();
         let coupon_line = $('.coupon_line_html').html();
-        $.ajax({
-            url: app.buildUrl + 'api/coupon/collect/memberToSelect',
-            data : {
-                skip : 0,
-                take : 10
-            },
-            type : 'post',
-            dataType : 'json',
-            beforeSend(){
-                layer.open({
-                    type: 3,offset: ['auto', '43%']
-                });
-            },
-            success(r) {
-                if (r.status == 0)
-                {
-                    let html = nothing.replace('[TEXT]',r.msg);
-                    $('.layui-tab-item.layui-show').html(html);
-                }
-                let data = r.data;
-                let html = '';
-                for(let i in data)
-                {
-                    html += coupon_line.replace('[TITLE]',data[i].coupon.title).replace('[PRICE]',data[i].price).replace('[NUMBER]',data[i].number).replace('[STATUS]',data[i].status_text).replace('[TIME]',data[i].time);
-                }
-                $('.layui-tab-item.layui-show').html(html);
 
-                layer.closeAll();
-            }
-        })
+        getData();
 
+        $('#switch_tab li').click(function(){
+            status = $(this).data('status');
+            getData();
+        });
+        function getData()
+        {
+            flow.load({
+                elem:'.layui-show',
+                md:0,
+                end : '没有更多了',
+                done(page,next)
+                {
+                    $.ajax({
+                        url: '/api/coupon/collect/memberToSelect',
+                        data : {
+                            skip : (page-1)*take,
+                            take : take,
+                            status : status
+                        },
+                        type : 'post',
+                        dataType : 'json',
+                        beforeSend(){
+                            layer.open({
+                                type: 3,offset: ['auto', '43%']
+                            });
+                        },
+                        success(r) {
+                            let html = '';
+                            if(page == 1)
+                            {
+                                if (r.status == 0)
+                                {
+                                    html = nothing.replace('[TEXT]',r.msg);
+                                }
+                                if(r.status == 1)
+                                {
+                                    let data = r.data;
+                                    for(let i in data)
+                                    {
+                                        html += coupon_line.replace('[TITLE]',data[i].coupon.title).replace('[PRICE]',data[i].price).replace('[NUMBER]',data[i].number).replace('[STATUS]',data[i].status_text).replace('[TIME]',data[i].time);
+                                    }
+                                }
+                                $('.layui-tab-item.layui-show').html(html);
+                            }
+                            if(page > 1)
+                            {
+                                console.log(1);
+                                if (r.status == 0)
+                                {
+                                    //html = nothing.replace('[TEXT]',r.msg);
+                                }
+                                if(r.status == 1)
+                                {
+                                    let data = r.data;
+                                    let html = $('.layui-show').html();
+                                    for(let i in data)
+                                    {
+                                        html += coupon_line.replace('[TITLE]',data[i].coupon.title).replace('[PRICE]',data[i].price).replace('[NUMBER]',data[i].number).replace('[STATUS]',data[i].status_text).replace('[TIME]',data[i].time);
+                                    }
+                                    $('.layui-tab-item.layui-show').html(html);
+                                }
+                            }
+                            layer.closeAll();
+                            next('',page < r.pages);
+                        }
+                    });
+                }
+            });
+        }
     });
 </script>
 </body>

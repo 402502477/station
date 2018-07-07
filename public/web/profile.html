@@ -75,7 +75,7 @@
     layui.use('layer', function(){
         let layer = layui.layer;
         $.ajax({
-            url: app.buildUrl + 'api/member/find',
+            url: '/api/member/find',
             data : {},
             type : 'post',
             dataType : 'json',

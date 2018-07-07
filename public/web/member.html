@@ -13,7 +13,7 @@
         <div class="member-body layui-clear">
             <div class="layui-col-xs3">
                 <div class="avatar">
-                    <a href="profile.html"><img class="layui-circle" src="[avatar]" alt=""></a>
+                    <a href="profile.html"><img class="layui-circle" src="" alt=""></a>
                 </div>
             </div>
             <div class="layui-col-xs9">
@@ -89,7 +89,7 @@
             app.navigateTo(url);
         });
         $.ajax({
-            url: app.buildUrl + 'api/member/find',
+            url: '/api/member/find',
             data : {},
             type : 'post',
             dataType : 'json',

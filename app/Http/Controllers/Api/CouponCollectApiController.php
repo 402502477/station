@@ -38,23 +38,26 @@ class CouponCollectApiController extends CommonController
             $vl['status_text'] = $this->status[$vl['status']];
         }
         $count = CouponCollect::where($wh)->count();
-        return $this->toApi([
+        return [
             'data' => $datum,
             'skip' => $skip,
             'limit' => $take,
             'count' => $count
-        ]);
+        ];
     }
     public function memberToSelect(Request $request)
     {
         $status = $request->input('status',1);
         $skip = $request->input('skip',0);
         $take = $request->input('take',10);
-        $uid = 'oLKAB1bcmTVvKN7AHRdcEA9p5OiM';
-        $res = CouponCollect::where([
+
+
+        $uid = 'oLKAB1bcmTVvKN7AHRdcEA9p5OiM';//TODO 测试数据
+        $wh = [
             ['uid',$uid],
             ['status',$status]
-        ])->skip($skip)->take($take)->orderBy('create_at','desc')->get();
+        ];
+        $res = CouponCollect::where($wh)->skip($skip)->take($take)->orderBy('create_at','desc')->get();
         if(count($res) == 0)
         {
             return ['status' => 0 ,'msg'=>'暂无数据！'];
@@ -84,6 +87,8 @@ class CouponCollectApiController extends CommonController
             $vl['time'] = date('Y-m-d',strtotime($vl['create_at'].' + '.$time.' day ')).'前';
         }
 
-        return ['status' => 1 ,'data' => $res];
+        $count = CouponCollect::where($wh)->count();
+        $pages = $count / $take;
+        return ['status' => 1 ,'data' => $res ,'pages' => ceil($pages)];
     }
 }

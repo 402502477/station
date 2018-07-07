@@ -1,5 +1,5 @@
 let app ={
-    buildUrl : '//station.test/',
+    buildUrl : '',
     navigateTo(url){
         window.location = url;
     }
