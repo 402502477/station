@@ -17,7 +17,7 @@
                             </select>
                         </div>
                         {{--<a href="{{ url('Manages/coupons/create') }}" class="btn btn-primary btn-sm" type="button">添加</a>--}}
-                        <button class="btn btn-danger btn-sm batchHandle" type="button" data-type="delete">批量删除</button>
+                        {{--<button class="btn btn-danger btn-sm batchHandle" type="button" data-type="delete">批量删除</button>--}}
                     </div>
                     <div class="col-sm-6 text-right">
                         <div class="form-group">
@@ -33,13 +33,13 @@
             </div>
             <table class="table table-hover orders_list">
                 <thead>
-                    <tr>
+                    <tr>{{--
                         <th>
                             <label class="fancy-checkbox full-switch">
                                 <input type="checkbox">
                                 <span></span>
                             </label>
-                        </th>
+                        </th>--}}
                         <th>ID</th>
                         <th>订单编号</th>
                         <th>用户ID</th>
@@ -57,11 +57,11 @@
                         <td>[NUMBER]</td>
                         <td>[MID]</td>
                         <td>[USERNAME]</td>
-                        <td>[TOTAL]</td>
-                        <td>[ACTUAL]</td>
+                        <td>￥[TOTAL]</td>
+                        <td>￥[ACTUAL]</td>
                         <td>[TIME]</td>
                         <td>[STATUS]</td>
-                        <td></td>
+                        <td><a class="btn btn-info btn-sm" href="/Manages/orders/info/[ID]">信息</a></td>
                     </tr>
                 </tbody>
             </table>
@@ -72,110 +72,49 @@
 @stop
 @section('footer')
     <script>
-        getList();
+
+        let skip = 0;
         let take = 10; //全局化页面数据显示长度
         let search = null;
         let keywords = null;
 
+        let list_html = $('.orders_list tbody').html();
+
+        getList({},list_html);
         //切换页面数据长度
         $('select[name=length]').change(function(){
             take = $(this).val();
-            getList({
-                take:take,
-                search:search,
-                keywords:keywords
-            });
+            getList({skip:skip,take:take,search:search,keywords:keywords},list_html);
         });
 
         //搜索操作
         $('button[name=searching]').click(function(){
             search = $('select[name=search]').val();
             keywords = $('input[name=keywords]').val();
-
             if(!search || !keywords)
             {
                 app.layOpen('请先选择搜索类型并输入搜索内容！',2);
-                return;
+                return null;
             }
-            getList({
-                take : take,
-                search : search,
-                keywords : keywords
-            });
+            getList({skip:skip,take:take,search:search,keywords:keywords},list_html);
         });
-        //批量删除
-        $('.batchHandle').click(function(){
-            let data = app.getCheckId();
-            if(data.length)
-            {
-                $.ajax({
-                    url:'{{ url('api/order/delete') }}',
-                    type :'post',
-                    data:{
-                        id : data
-                    },
-                    dataType:'json',
-                    success(r)
-                    {
-                        if(r.code)
-                        {
-                            return app.alert({content:r.msg,onSure(){getList({take : take,search : search,keywords : keywords})}})
-                        }
-                        return app.alert({content:r.msg});
-                    }
-                });
-                return;
-            }
-            return app.alert({content:'请先选择需要删除的项目！'})
-        });
-        //删除信息
-        function onDelete(obj)
-        {
-            app.alert({
-                content:'确定要删除此条记录么？',
-                showCancel : true,
-                onSure()
-                {
-                    let id = $(obj).data('id');
-                    $.ajax({
-                        url : '{{url("api/order/delete")}}',
-                        data : {
-                            id : id
-                        },
-                        type : 'post',
-                        dataType : 'json',
-                        success(r)
-                        {
-                            if(r.code)
-                            {
-                                $(obj).parents('tr').remove();
-                                app.layOpen(r.msg,1);
-                                return;
-                            }
-                            app.layOpen(r.msg,2);
-                        }
-                    })
-                }
-            });
-
-        }
         //获取列表方法
-        function getList(dt,method)
+        function getList(dt,xml)
         {
             app.getLists({
                 url : "{{ url('api/order/get') }}",
                 data : dt,
-                method : method || 'post',
+                method : 'post',
                 success (r)
                 {
                     let data = r.data;
-                    let label_color = ['label-danger','label-success','label-warning'];
+                    let label_color = ['','label-danger','label-success','label-warning'];
                     let html = '';
                     for(let i in data)
                     {
-                        html += '';
+                        html += xml.replace('[ID]',data[i].id).replace('[NUMBER]',data[i].order_id).replace('[TOTAL]',data[i].original_point).replace('[ACTUAL]',data[i].current_point).replace('[TIME]',data[i].create_at).replace('[MID]',data[i].mid).replace('[USERNAME]',data[i].username).replace('[STATUS]','<label class="label '+label_color[data[i].status]+'">'+data[i].status_text+'</label>').replace('[ID]',data[i].id);
                     }
-                    $('.coupon_list tbody').html(html);
+                    $('.orders_list tbody').html(html);
 
 
                     layui.use('laypage', function(){
@@ -193,7 +132,7 @@
                                 {
                                     let skip = (obj.curr-1) * r.limit;
                                     let take = $('select[name=length]').val();
-                                    getList({skip:skip,take:take});
+                                    getList({skip:skip,take:take},xml);
                                 }
                             }
                         });

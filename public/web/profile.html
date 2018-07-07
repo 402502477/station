@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>个人资料</title>
+    <link rel="stylesheet" href="asset/css/app.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<div class="overview">
+    <div class="layui-row layui-bg-cyan">
+        <div class="member-body layui-clear">
+            <div class="layui-col-xs3">
+                <div class="avatar"><img class="layui-circle" src="" alt="">
+                </div>
+            </div>
+            <div class="layui-col-xs9">
+                <div class="username"><span></span></div>
+            </div>
+        </div>
+    </div>
+    <fieldset class="layui-elem-field layui-field-title text-block">
+        <legend>基本信息</legend>
+        <div class="layui-field-box">
+            <div class="text-line layui-clear">
+                <span class="left">手机号</span>
+                <span class="right contact"></span>
+            </div>
+            <div class="text-line layui-clear">
+                <span class="left">姓名</span>
+                <span class="right username"></span>
+            </div>
+            <div class="text-line layui-clear">
+                <span class="left">性别</span>
+                <span class="right gender"></span>
+            </div>
+            <div class="text-line layui-clear">
+                <span class="left">地区</span>
+                <span class="right area"></span>
+            </div>
+            <div class="text-line layui-clear">
+                <span class="left">加入时间</span>
+                <span class="right join_time"></span>
+            </div>
+        </div>
+    </fieldset>
+    <!--<fieldset class="layui-elem-field layui-field-title text-block">
+        <legend>其他信息</legend>
+        <div class="layui-field-box">
+            <div class="text-line layui-clear">
+                <span class="left">[LEFT]</span>
+                <span class="right">
+                    <input type="text" class="input">
+                    <i class="layui-icon">&#xe642;</i>
+                </span>
+            </div>
+            <div class="text-line layui-clear">
+                <span class="left">[LEFT]</span>
+                <span class="right">[RIGHT]</span>
+            </div>
+            <div class="text-line layui-clear">
+                <span class="left">[LEFT]</span>
+                <span class="right">[RIGHT]</span>
+            </div>
+        </div>
+    </fieldset>-->
+
+</div>
+
+<script src="asset/js/jquery.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="asset/js/app.js"></script>
+<script>
+    layui.use('layer', function(){
+        let layer = layui.layer;
+        $.ajax({
+            url: app.buildUrl + 'api/member/find',
+            data : {},
+            type : 'post',
+            dataType : 'json',
+            beforeSend(){
+                layer.open({
+                    type: 3,offset: ['auto', '43%']
+                });
+            },
+            success(r)
+            {
+                if(r.status == 2)
+                {
+                    layer.open({
+                        title: '提示',
+                        content: r.msg
+                    });
+                    return null;
+                }
+                let data = r.data;
+                $('.avatar img').attr('src',data.info.headimgurl);
+                $('.username span').text(data.username);
+                $('.text-block .username').text(data.username);
+                $('.text-block .contact').text(data.contact);
+                $('.text-block .gender').text(data.gender);
+                $('.text-block .area').text(data.area);
+                $('.text-block .join_time').text(data.create_at);
+                layer.closeAll();
+            }
+        })
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>我的优惠券</title>
+    <link rel="stylesheet" href="asset/css/app.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<div class="overview">
+    <form action="" class="layui-form">
+        <div class="layui-card receipt_block">
+            <div class="layui-card-header">发票信息</div>
+            <div class="layui-card-body">
+                <ul class="receipt_line">
+                    <li class="layui-clear">
+                        <span class="title">[TITLE]</span>
+                        <span class="input">
+                        <input type="text" placeholder="请输入发票抬头">
+                    </span>
+                    </li>
+                    <li>
+                    <span class="content">
+                        <textarea placeholder="在这里输入发票内容"></textarea>
+                    </span>
+                    </li>
+                    <li class="layui-clear">
+                        <span class="title">[TITLE]</span>
+                        <span class="toggle">
+                            <input type="checkbox" name="" lay-skin="switch" lay-text="ON|OFF">
+                        </span>
+                    </li>
+                    <li>
+                        <div class="button">
+                            <button class="layui-btn layui-btn-fluid">流体按钮</button>
+                        </div>
+                        <div class="button">
+                            <button class="layui-btn layui-btn-fluid layui-btn-primary">流体按钮</button>
+                        </div>
+                    </li>
+                    <li class="layui-clear">
+                        <span class="receipt_title">[TITLE]</span>
+                        <span class="is_check">
+                            <i class="layui-icon">&#xe605;</i>
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="../layui/layui.js"></script>
+<script>
+    layui.use('form', function(){
+        let form = layui.form;
+
+        form.on('switch', function(data){
+            console.log(data.elem); //得到checkbox原始DOM对象
+            console.log(data.elem.checked); //开关是否开启，true或者false
+            console.log(data.value); //开关value值，也可以通过data.elem.value得到
+            console.log(data.othis); //得到美化后的DOM对象
+        });
+    });
+</script>
+</body>
+</html>

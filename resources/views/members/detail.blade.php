@@ -59,7 +59,7 @@
             <!-- END LEFT COLUMN -->
             <!-- RIGHT COLUMN -->
             <div class="profile-right">
-                <h4 class="heading">会员信息</h4>
+                {{--<h4 class="heading">会员信息</h4>
                 <!-- AWARDS -->
                 <div class="awards">
                     <div class="row">
@@ -97,16 +97,16 @@
                         </div>
                     </div>
                     <div class="text-center"><a href="#" class="btn btn-default">See all awards</a></div>
-                </div>
+                </div>--}}
                 <!-- END AWARDS -->
                 <!-- TABBED CONTENT -->
                 <div class="custom-tabs-line tabs-line-bottom left-aligned">
                     <ul class="nav" role="tablist">
-                        <li class="active"><a href="#coupon" role="tab" data-toggle="tab" aria-expanded="">优惠券</a></li>
-                        <li class=""><a href="#order" role="tab" data-toggle="tab" aria-expanded="">订单记录</a></li>
+                        <li class="active"><a href="#coupon" role="tab" data-toggle="tab" aria-expanded="" name="coupon">优惠券</a></li>
+                        <li class=""><a href="#order" role="tab" data-toggle="tab" aria-expanded="" name="order">订单记录</a></li>
                     </ul>
                 </div>
-                <div class="tab-content">
+                <div class="tab-content" style="height: 682px;">
                     {{--<div class="tab-pane fade in " id="step">
                         <ul class="list-unstyled activity-timeline">
                             <li>
@@ -152,7 +152,7 @@
                             </table>
                         </div>
                         <div class="margin-top-30 text-center">
-                            <ul class="pagination" id="pagination"></ul>
+                            <ul class="pagination" id="coupon_page"></ul>
                         </div>
                     </div>
 
@@ -169,16 +169,16 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <a href="/Manage/order/info/[ID]">[NUMBER]</a>
+                                        <a href="/Manages/orders/info/[ID]">[NUMBER]</a>
                                     </td>
-                                    <td>[PRICE]</td>
+                                    <td>￥[PRICE]</td>
                                     <td>[STATUS]</td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="margin-top-30 text-center">
-                            <ul class="pagination" id="pagination"></ul>
+                            <ul class="pagination" id="order_page"></ul>
                         </div>
                     </div>
                 </div>
@@ -194,17 +194,31 @@
         let order_html = $('#order tbody').html();
         let skip = 0;
         let take = 10;
-        getData(coupon_html);
-        function getData(html)
-        {
+        getData(coupon_html,'{{ url("api/coupon/collect/get") }}',function(html,r){
             let type = [
                 '',
                 '<span class="label label-success">未使用</span>',
                 '<span class="label label-info">已使用</span>',
                 '<span class="label label-danger">禁用</span>',
             ];
+
+            let data = r.data;
+            let content = '';
+            if(data)
+            {
+                for(let i in data)
+                {
+                    content += html.replace('[ID]',data[i].cid).replace('[ID]',data[i].cid).replace('[NUMBER]',data[i].number).replace('[USER]',data[i].username).replace('[TIME]',data[i].create_at).replace('[STATUS]',type[data[i].status]);
+                }
+            }
+            $('#coupon tbody').html(content);
+
+        },'coupon_page');
+        function getData(html,url,callback,elem)
+        {
+
             $.ajax({
-                url :  '{{ url("api/coupon/collect/get") }}',
+                url :  url,
                 type : 'post',
                 data : {
                     skip : skip|| null,
@@ -218,22 +232,13 @@
                 },
                 success(r)
                 {
-                    let data = r.data;
-                    let content = '';
-                    if(data)
-                    {
-                        for(let i in data)
-                        {
-                            content += html.replace('[ID]',data[i].cid).replace('[ID]',data[i].cid).replace('[NUMBER]',data[i].number).replace('[USER]',data[i].username).replace('[TIME]',data[i].create_at).replace('[STATUS]',type[data[i].status]);
-                        }
-                    }
+                    callback(html,r);
 
-                    $('#coupon tbody').html(content);
                     layui.use('laypage', function(){
                         let curr = parseInt(r.skip)+1;
                         let page = layui.laypage;
                         page.render({
-                            elem: 'pagination',
+                            elem: elem,
                             count: r.count,
                             limit: r.limit,
                             theme:'#00AAFF',
@@ -243,7 +248,7 @@
                                 if(!first)
                                 {
                                     skip = (obj.curr-1) * r.limit;
-                                    getData(coupon_html);
+                                    getData(html,url,callback,elem);
                                 }
                             }
                         });
@@ -253,5 +258,49 @@
                 }
             });
         }
+
+        $('.nav a[name=order]').click(function(){
+            getData(order_html,'{{ url("api/order/get") }}',function(html,r){
+                let type = [
+                    '',
+                    '<span class="label label-danger">未支付</span>',
+                    '<span class="label label-success">已支付</span>'
+                ];
+
+                let data = r.data;
+                let content = '';
+                if(data)
+                {
+                    for(let i in data)
+                    {
+                        content += html.replace('[NUMBER]',data[i].order_id).replace('[ID]',data[i].id).replace('[PRICE]',data[i].current_point).replace('[STATUS]',type[data[i].status]);
+                    }
+                }
+                $('#order tbody').html(content);
+
+            },'order_page');
+        });
+        $('.nav a[name=coupon]').click(function(){
+            getData(coupon_html,'{{ url("api/coupon/collect/get") }}',function(html,r){
+                let type = [
+                    '',
+                    '<span class="label label-success">未使用</span>',
+                    '<span class="label label-info">已使用</span>',
+                    '<span class="label label-danger">禁用</span>',
+                ];
+
+                let data = r.data;
+                let content = '';
+                if(data)
+                {
+                    for(let i in data)
+                    {
+                        content += html.replace('[ID]',data[i].cid).replace('[ID]',data[i].cid).replace('[NUMBER]',data[i].number).replace('[USER]',data[i].username).replace('[TIME]',data[i].create_at).replace('[STATUS]',type[data[i].status]);
+                    }
+                }
+                $('#coupon tbody').html(content);
+
+            },'coupon_page');
+        });
     </script>
 @stop

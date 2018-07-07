@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\EventCompletion;
 use App\Events\MemberWasRegistration;
 use App\Http\Controllers\CommonController;
+use App\Model\Coupon;
+use App\Model\CouponCollect;
 use App\Model\Member;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -60,9 +63,25 @@ class MemberApiController extends CommonController
         $res = Member::create($create);
         if($res)
         {
-            event(new MemberWasRegistration($res->id,$info['openid']));
+            event(new EventCompletion($res->id,$info['openid'],1));
             return ['status' => 1,'msg' => '添加用户成功！'];
         }
         return ['status' => 0,'msg' => '添加用户失败！'];
+    }
+    public function find()
+    {
+        $uid = 'oLKAB1bcmTVvKN7AHRdcEA9p5OiM';
+        $res = Member::where('uid',$uid)->first();
+        if(empty($res))
+        {
+            return ['status' => 2 ,'msg' => '用户信息获取失败，请重试！'];
+        }
+        $gender = ['未知','男','女'];
+        $res['info'] = json_decode($res['info'],true);
+        $res['balance'] = number_format($res['balance'],2);
+        $res['coupon_total'] = CouponCollect::where('uid',$uid)->count();
+        $res['area'] = $res['info']['country'].' '.$res['info']['province'].' '.$res['info']['city'];
+        $res['gender'] = $gender[$res['info']['sex']];
+        return ['status' => 1 ,'data' => $res];
     }
 }

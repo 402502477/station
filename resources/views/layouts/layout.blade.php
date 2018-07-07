@@ -161,10 +161,6 @@
 <script src="{{ asset('ui/scripts/klorofil-common.js') }}"></script>
 <script src="{{ asset('layui/layui.js') }}"></script>
 <script src="{{ asset('js/app.js') }}"></script>
-<script>
-    app.onPreLoading();
-    app.onFullSwitch();
-</script>
 @section('footer')
 @show
 </body>

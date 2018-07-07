@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 
 class CouponCollectApiController extends CommonController
 {
+    private $status = [
+        '无','未使用','已使用','已过期'
+    ];
     public function get(Request $request,$cid = null)
     {
-        $status = [
-            '无','未使用','已使用','禁用'
-        ];
         $wh = [];
         if($cid) $wh['cid'] = $cid;
         $search = $request -> input('search','');
@@ -35,7 +35,7 @@ class CouponCollectApiController extends CommonController
         foreach ($datum as &$vl)
         {
             if(empty($mid)) $vl['username'] = $vl->member['username'];
-            $vl['status_text'] = $status[$vl['status']];
+            $vl['status_text'] = $this->status[$vl['status']];
         }
         $count = CouponCollect::where($wh)->count();
         return $this->toApi([
@@ -44,5 +44,46 @@ class CouponCollectApiController extends CommonController
             'limit' => $take,
             'count' => $count
         ]);
+    }
+    public function memberToSelect(Request $request)
+    {
+        $status = $request->input('status',1);
+        $skip = $request->input('skip',0);
+        $take = $request->input('take',10);
+        $uid = 'oLKAB1bcmTVvKN7AHRdcEA9p5OiM';
+        $res = CouponCollect::where([
+            ['uid',$uid],
+            ['status',$status]
+        ])->skip($skip)->take($take)->orderBy('create_at','desc')->get();
+        if(count($res) == 0)
+        {
+            return ['status' => 0 ,'msg'=>'暂无数据！'];
+        }
+
+        foreach ($res as &$vl)
+        {
+            $vl['status_text'] = $this -> status[$vl['status']];
+            $vl['member'] = $vl->member;
+            $vl['coupon'] = $vl->coupon;
+            $promotions_detail = json_decode($vl['coupon']['promotions_detail'],true);
+            if($promotions_detail['type'] == 1)
+            {
+                $vl['price'] = $promotions_detail['point'];
+            }
+            if($promotions_detail['type'] == 2)
+            {
+                $vl['price'] = $promotions_detail['point'].'% OFF';
+            }
+            $time = json_decode($vl['coupon']['time_limit'],true);
+
+            if(is_array($time))
+            {
+                $vl['time'] = '<p>'.date('Y-m-d',$time[0]) .'</p><p>至</p><p>'.date('Y-m-d',$time[1]).'</p>';
+                continue;
+            }
+            $vl['time'] = date('Y-m-d',strtotime($vl['create_at'].' + '.$time.' day ')).'前';
+        }
+
+        return ['status' => 1 ,'data' => $res];
     }
 }

@@ -12,20 +12,23 @@
 */
 Auth::routes();
 
-Route::get('/', 'Manages\HomeController@index')->name('home');
+Route::group(['middleware' => ['auth']], function () {
 
-Route::group(['prefix' => 'Manages/members'],function(){
-    Route::get('index','Manages\MemberController@index');
-    Route::get('detail/{mid}','Manages\MemberController@detail');
-});
+    Route::get('/', 'Manages\HomeController@index')->name('home');
 
-Route::group(['prefix' => 'Manages/coupons'],function(){
-    Route::get('index','Manages\CouponController@index');
-    Route::get('create','Manages\CouponController@create');
-    Route::get('info/{cid}','Manages\CouponController@info');
-});
+    Route::group(['prefix' => 'Manages/members'],function(){
+        Route::get('index','Manages\MemberController@index');
+        Route::get('detail/{mid}','Manages\MemberController@detail');
+    });
 
-Route::group(['prefix' => 'Manages/orders'],function(){
-    Route::get('index','Manages\OrderController@index');
-    Route::get('info/{oid}','Manages\OrderController@info');
+    Route::group(['prefix' => 'Manages/coupons'],function(){
+        Route::get('index','Manages\CouponController@index');
+        Route::get('create','Manages\CouponController@create');
+        Route::get('info/{cid}','Manages\CouponController@info');
+    });
+
+    Route::group(['prefix' => 'Manages/orders'],function(){
+        Route::get('index','Manages\OrderController@index');
+        Route::get('info/{oid}','Manages\OrderController@info');
+    });
 });

@@ -19,6 +19,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::group(['prefix' => 'member'],function(){
     Route::any('get','Api\MemberApiController@get');
     Route::get('create','Api\MemberApiController@create');
+    Route::post('find','Api\MemberApiController@find');
 });
 Route::group(['prefix' => 'order'],function(){
     Route::any('get','Api\OrderApiController@get');
@@ -27,6 +28,7 @@ Route::group(['prefix' => 'order'],function(){
 Route::group(['prefix' => 'coupon'],function(){
     Route::group(['prefix' => 'collect'],function(){
         Route::any('get/{cid?}','Api\CouponCollectApiController@get');
+        Route::any('memberToSelect','Api\CouponCollectApiController@memberToSelect');
     });
     Route::post('create','Api\CouponApiController@create');
     Route::any('get','Api\CouponApiController@get');

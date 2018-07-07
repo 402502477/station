@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>会员中心</title>
+    <link rel="stylesheet" href="asset/css/app.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<div class="overview">
+    <div class="layui-row layui-bg-cyan">
+        <div class="member-body layui-clear">
+            <div class="layui-col-xs3">
+                <div class="avatar">
+                    <a href="profile.html"><img class="layui-circle" src="[avatar]" alt=""></a>
+                </div>
+            </div>
+            <div class="layui-col-xs9">
+                <div class="username"><span></span></div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row owner-block">
+        <div class="layui-col-xs6">
+            <div class="owner-body" data-url="">
+                <div class="icon">
+                    <i class="iconfont">&#xe65a;</i>
+                </div>
+                <div class="text">余额<span class="balance"></span>元</div>
+            </div>
+        </div>
+        <div class="layui-col-xs6">
+            <div class="owner-body" data-url="coupon.html">
+                <div class="icon">
+                    <i class="iconfont">&#xe681;</i>
+                </div>
+                <div class="text">优惠券<span class="coupon"></span>张</div>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row app-block">
+        <div class="layui-col-xs3">
+            <div class="app-boyd" data-url="profile.html">
+                <div class="icon">
+                    <i class="iconfont">&#xe6a8;</i>
+                </div>
+                <div class="text">个人资料</div>
+            </div>
+        </div>
+        <div class="layui-col-xs3">
+            <div class="app-boyd" data-url="order.html">
+                <div class="icon">
+                    <i class="iconfont">&#xe654;</i>
+                </div>
+                <div class="text">消费记录</div>
+            </div>
+        </div>
+        <div class="layui-col-xs3">
+            <div class="app-boyd" data-url="receipt.html">
+                <div class="icon">
+                    <i class="iconfont">&#xe72a;</i>
+                </div>
+                <div class="text">发票信息</div>
+            </div>
+        </div>
+        <div class="layui-col-xs3">
+            <div class="app-boyd" data-url="coupon.html">
+                <div class="icon">
+                    <i class="iconfont">&#xe638;</i>
+                </div>
+                <div class="text">优惠券</div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="asset/js/jquery.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="asset/js/app.js"></script>
+<script>
+    layui.use('layer', function(){
+        let layer = layui.layer;
+        $('.app-boyd').click(function(){
+            let url = $(this).data('url');
+            app.navigateTo(url);
+        });
+        $('.owner-body').click(function(){
+            let url = $(this).data('url');
+            app.navigateTo(url);
+        });
+        $.ajax({
+            url: app.buildUrl + 'api/member/find',
+            data : {},
+            type : 'post',
+            dataType : 'json',
+            beforeSend(){
+                layer.open({
+                    type: 3,offset: ['auto', '43%']
+                });
+            },
+            success(r)
+            {
+                if(r.status == 2)
+                {
+                    layer.open({
+                        title: '提示',
+                        content: r.msg
+                    });
+                    return null;
+                }
+                let data = r.data;
+                $('.avatar img').attr('src',data.info.headimgurl);
+                $('.username span').text(data.username);
+                $('.balance').text(data.balance);
+                $('.coupon').text(data.coupon_total);
+                layer.closeAll();
+            }
+        })
+    });
+</script>
+</body>
+</html>

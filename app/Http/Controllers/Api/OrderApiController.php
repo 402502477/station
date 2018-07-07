@@ -21,17 +21,23 @@ class OrderApiController extends CommonController
 
         $skip = $request -> input('skip',0);
         $take = $request -> input('take',10);
-        //$select = ['id','title','promotions_detail','time_limit','status','create_at','extend'];
+        $select = ['id','mid','uid','order_id','original_point','current_point','goods_info','extend','create_at','status'];
 
-        $datum = Order::where($wh)->orderBy('create_at','desc')->skip($skip)->take($take)->get();
+        $datum = Order::where($wh)->select($select)->orderBy('create_at','desc')->skip($skip)->take($take)->get();
+        $status = ['无','未付款','已支付'];
+        foreach ($datum as &$vl)
+        {
+            if(empty($mid)) $vl['username'] = $vl->member['username'];
+            $vl['status_text'] = $status[$vl['status']];
+        }
 
         $count = Order::where($wh)->count();
-        return $this->toApi([
+        return [
             'data' => $datum,
             'skip' => $skip,
             'limit' => $take,
             'count' => $count
-        ]);
+        ];
     }
     public function info($id = null)
     {

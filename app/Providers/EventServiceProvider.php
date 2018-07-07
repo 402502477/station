@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\MemberWasRegistration' => [
-            'App\Listeners\SendCouponToNewMember',
+        'App\Events\EventCompletion' => [
+            'App\Listeners\SendCouponToClient',
         ],
     ];
 

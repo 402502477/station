@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>我的优惠券</title>
+    <link rel="stylesheet" href="asset/css/app.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<div class="overview">
+    <div class="layui-card coupon">
+        <div class="layui-card-header">我的优惠券</div>
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+            <ul class="layui-tab-title">
+                <li class="layui-this">未使用</li>
+                <li>已使用</li>
+                <li>已过期</li>
+            </ul>
+            <div class="layui-tab-content">
+                <div class="layui-tab-item layui-show">
+                </div>
+                <div class="layui-tab-item">
+                </div>
+                <div class="layui-tab-item">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="layui-hide nothing_html">
+    <div class="nothing">
+        <div class="icon">
+            <i class="">!</i>
+        </div>
+        <div class="text">
+            [TEXT]
+        </div>
+    </div>
+</div>
+<div class="layui-hide coupon_line_html">
+    <div class="coupon_line layui-clear">
+        <div class="left">
+            <div class="title"><span>[TITLE]</span></div>
+            <div class="price">￥ <span>[PRICE]</span></div>
+            <div class="number">No.<span>[NUMBER]</span></div>
+        </div>
+        <div class="right">
+            <div class="status">[STATUS]</div>
+            <div class="time">[TIME]</div>
+        </div>
+    </div>
+</div>
+
+<script src="asset/js/jquery.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="asset/js/app.js"></script>
+<script>
+    layui.use(['element','layer'], function(){
+        let element = layui.element;
+        let layer = layui.layer;
+        let nothing = $('.nothing_html').html();
+        let coupon_line = $('.coupon_line_html').html();
+        $.ajax({
+            url: app.buildUrl + 'api/coupon/collect/memberToSelect',
+            data : {
+                skip : 0,
+                take : 10
+            },
+            type : 'post',
+            dataType : 'json',
+            beforeSend(){
+                layer.open({
+                    type: 3,offset: ['auto', '43%']
+                });
+            },
+            success(r) {
+                if (r.status == 0)
+                {
+                    let html = nothing.replace('[TEXT]',r.msg);
+                    $('.layui-tab-item.layui-show').html(html);
+                }
+                let data = r.data;
+                let html = '';
+                for(let i in data)
+                {
+                    html += coupon_line.replace('[TITLE]',data[i].coupon.title).replace('[PRICE]',data[i].price).replace('[NUMBER]',data[i].number).replace('[STATUS]',data[i].status_text).replace('[TIME]',data[i].time);
+                }
+                $('.layui-tab-item.layui-show').html(html);
+
+                layer.closeAll();
+            }
+        })
+
+    });
+</script>
+</body>
+</html>

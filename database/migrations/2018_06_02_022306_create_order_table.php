@@ -15,11 +15,15 @@ class CreateOrderTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->increments('id');
+            $table->unsignedInteger('mid')->comment('用户id');
+            $table->char('uid',29)->comment('用户唯一值');
             $table->char('order_id',30)->unique()->comment('订单编号 XX + time(201705061224511) + uid + rand*4');
             $table->float('original_point',8,2)->default(0.00)->comment('订单原价/原积分');
             $table->float('current_point',8,2)->default(0.00)->comment('订单现价/现积分');
             $table->string('promotions_info',255)->nullable()->comment('优惠信息');
             $table->string('goods_info',255)->nullable()->comment('商品信息');
+
+            $table->index(['mid','uid']);
 
             $table->text('extend')->nullable()->comment('扩展字段');
             $table->unsignedTinyInteger('status')->nullable()->default(1);

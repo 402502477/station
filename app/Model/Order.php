@@ -9,7 +9,7 @@ class Order extends Model
 {
     use SoftDeletes;
 
-    protected $table = 'Order';
+    protected $table = 'orders';
 
     protected $guarded = [];
 
@@ -31,5 +31,10 @@ class Order extends Model
     public function fromDateTime($value)
     {
         return $value;
+    }
+
+    public function member()
+    {
+        return $this->belongsTo('App\Model\Member', 'mid');
     }
 }

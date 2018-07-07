@@ -10,19 +10,19 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label">订单编号</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static">xxxx</p>
+                        <p class="form-control-static">{{ $row['order_id'] }}</p>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">订单金额</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static">￥0.01</p>
+                        <p class="form-control-static">￥{{ $row['original_point'] }}</p>
                     </div>
                 </div>
                 <div class="form-group">
                     <label class="col-sm-2 control-label">实付金额</label>
                     <div class="col-sm-10">
-                        <p class="form-control-static">￥0.01</p>
+                        <p class="form-control-static">￥{{ $row['current_point'] }}</p>
                     </div>
                 </div>
                 <div class="form-group">
