@@ -10,57 +10,143 @@
 <body>
 <div class="overview">
     <form action="" class="layui-form">
+        <input type="hidden" name="id" value="">
         <div class="layui-card receipt_block">
             <div class="layui-card-header">发票信息</div>
             <div class="layui-card-body">
                 <ul class="receipt_line">
                     <li class="layui-clear">
-                        <span class="title">[TITLE]</span>
+                        <span class="title">发票抬头</span>
                         <span class="input">
-                        <input type="text" placeholder="请输入发票抬头">
+                        <input type="text" placeholder="请输入发票抬头" name="title" lay-verify="title">
                     </span>
                     </li>
                     <li>
                     <span class="content">
-                        <textarea placeholder="在这里输入发票内容"></textarea>
+                        <textarea placeholder="在这里输入发票内容" name="content" lay-verify="content"></textarea>
                     </span>
                     </li>
                     <li class="layui-clear">
-                        <span class="title">[TITLE]</span>
+                        <span class="title">设为默认</span>
                         <span class="toggle">
-                            <input type="checkbox" name="" lay-skin="switch" lay-text="ON|OFF">
+                            <input type="checkbox" name="is_default" lay-skin="switch" lay-text="ON|OFF">
                         </span>
                     </li>
                     <li>
                         <div class="button">
-                            <button class="layui-btn layui-btn-fluid">流体按钮</button>
+                            <button class="layui-btn layui-btn-fluid" lay-submit>保存信息</button>
                         </div>
                         <div class="button">
-                            <button class="layui-btn layui-btn-fluid layui-btn-primary">流体按钮</button>
+                            <button class="layui-btn layui-btn-fluid layui-btn-primary rest" type="reset">添加新发票</button>
                         </div>
                     </li>
-                    <li class="layui-clear">
-                        <span class="receipt_title">[TITLE]</span>
-                        <span class="is_check">
-                            <i class="layui-icon">&#xe605;</i>
-                        </span>
-                    </li>
+                    <div class="receipt_list">
+
+                    </div>
+
                 </ul>
             </div>
         </div>
     </form>
 </div>
+<div class="layui-hide receipt_list_html">
+    <li class="layui-clear receipt_list_line" data-id="[ID]">
+        <span class="receipt_title">[TITLE]</span>
+        <span class="is_check [HIDE]">
+            <i class="layui-icon">&#xe605;</i>
+        </span>
+    </li>
+</div>
 <script src="../layui/layui.js"></script>
 <script>
-    layui.use('form', function(){
+    layui.use(['form','jquery','layer'], function(){
         let form = layui.form;
+        let jq = layui.jquery;
+        let data = [];
 
-        form.on('switch', function(data){
-            console.log(data.elem); //得到checkbox原始DOM对象
-            console.log(data.elem.checked); //开关是否开启，true或者false
-            console.log(data.value); //开关value值，也可以通过data.elem.value得到
-            console.log(data.othis); //得到美化后的DOM对象
+        let receipt_list_html = jq('.receipt_list_html').html();
+        getData();
+        function getData()
+        {
+            jq.ajax({
+                url : '/api/member/getReceipt',
+                data : {},
+                type : 'post',
+                dataType : 'json',
+                beforeSend()
+                {
+                    layer.open({type:3});
+                },
+                success(r)
+                {
+                    data = r;
+                    if(r)
+                    {
+                        let html ='';
+                        for(let i in r)
+                        {
+                            if(r[i].is_default == false)
+                            {
+                                html += receipt_list_html.replace('[TITLE]',r[i].title).replace('[HIDE]','layui-hide').replace('[ID]',i);
+                                continue;
+                            }
+                            html += receipt_list_html.replace('[TITLE]',r[i].title).replace('[ID]',i);
+
+                        }
+                        jq('.receipt_list').html(html);
+                    }
+                    layer.closeAll();
+
+                    jq('.receipt_list_line').click(function(){
+                        let id = jq(this).data('id');
+                        jq('input[name=title]').val(data[id].title);
+                        jq('textarea[name=content]').val(data[id].content);
+                        jq('input[name=id]').val(id);
+                    });
+                }
+            });
+        }
+        jq('.rest').click(function(){
+            jq('input[name=id]').val('');
+        })
+
+
+        form.verify({
+            title(value)
+            {
+                if(!value)
+                {
+                    return '标题不得为空！';
+                }
+            },
+            content(value)
+            {
+                if(!value)
+                {
+                    return '发票内容不得为空！';
+                }
+            }
         });
+        form.on('submit',function(data){
+            jq.ajax({
+                url : '/api/member/receipt',
+                data:data.field,
+                dataType:'json',
+                type : 'post',
+                beforeSend(){
+                    layer.open({type:3});
+                },
+                success(res)
+                {
+                    layer.closeAll();
+                    layer.msg(res.msg);
+                    getData();
+                }
+            });
+            return false;
+        });
+
+
     });
 </script>
 </body>

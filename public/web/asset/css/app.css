@@ -2,6 +2,33 @@
 html{
     background-color: #f5f5f5;
 }
+/* common */
+.nothing{
+    margin: 8rem auto;
+    text-align: center;
+}
+.nothing .icon{
+    margin: 1rem;
+}
+.nothing .icon i{
+    font-style: normal;
+    font-size: 5rem;
+    color: #fff;
+    display: block;
+    margin: 0 auto;
+    width: 6rem;
+    height: 6rem;
+    box-sizing: border-box;
+    background-color: #1E9FFF;
+    border-radius: 100%;
+    line-height: 5rem;
+}
+.nothing .text{
+    font-size: 1.5rem;
+    color: #949394;
+}
+
+
 /* member css */
 .overview .member-body {
     color:#fff;
@@ -109,29 +136,7 @@ html{
 }
 .overview .coupon .layui-tab-content{
 }
-.overview .coupon .nothing{
-    margin: 8rem auto;
-    text-align: center;
-}
-.overview .coupon .nothing .icon{
-    margin: 1rem;
-}
-.overview .coupon .nothing .icon i{
-    font-style: normal;
-    font-size: 5rem;
-    color: #fff;
-    display: block;
-    margin: 0 auto;
-    width: 6rem;
-    height: 6rem;
-    box-sizing: border-box;
-    background-color: #1E9FFF;
-    border-radius: 100%;
-}
-.overview .coupon .nothing .text{
-    font-size: 1.5rem;
-    color: #949394;
-}
+
 .overview .coupon .coupon_line{
     margin: 0.3rem 0;
     background-color: #455b64;

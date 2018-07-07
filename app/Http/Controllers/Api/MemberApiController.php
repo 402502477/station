@@ -84,4 +84,44 @@ class MemberApiController extends CommonController
         $res['gender'] = $gender[$res['info']['sex']];
         return ['status' => 1 ,'data' => $res];
     }
+    public function receipt(Request $request)
+    {
+        $uid = 'oLKAB1bcmTVvKN7AHRdcEA9p5OiM';
+
+        $title = $request->input('title');
+        $content = $request->input('content');
+        $is_default = $request->input('is_default', false)? true : false;
+        $id = $request->input('id', null);
+
+        $find = Member::where('uid', $uid)->first();
+        $receipt = json_decode($find->receipt_info, true) ?? [];
+
+        if ($is_default) {
+            foreach ($receipt as $ky => &$vl) {
+                $vl['is_default'] = false;
+            }
+        }
+        if ($id !== null) {
+            $receipt[$id] = ['title' => $title, 'content' => $content, 'is_default' => $is_default];
+
+        } else {
+            array_push($receipt, ['title' => $title, 'content' => $content, 'is_default' => $is_default]);
+        }
+        $find->receipt_info = json_encode($receipt);
+        $res = $find -> save();
+        if ($res)
+        {
+            return ['status'=>1 ,'msg' => '操作成功！'];
+        }
+        return ['status' => 0 ,'msg' => '操作失败！'];
+    }
+    public function getReceipt(Request $request)
+    {
+        $uid = 'oLKAB1bcmTVvKN7AHRdcEA9p5OiM';
+
+        $find = Member::where('uid',$uid)->first();
+        $receipt = json_decode($find -> receipt_info,true)??[];
+
+        return $receipt;
+    }
 }

@@ -22,7 +22,7 @@ class CreateMemberTable extends Migration
             $table->float('balance',8,2)->default(0.00)->comment('现金余额');
             $table->unsignedInteger('coin')->default(0)->comment('金币、积分余额');
             $table->text('info')->nullable()->comment('用户详细信息');
-            $table->string('receipt_info',255)->nullable()->comment('发票信息');
+            $table->text('receipt_info')->nullable()->comment('发票信息');
             $table->unique('uid');
             $table->index(['username','balance','coin']);
 

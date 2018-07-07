@@ -80,7 +80,6 @@
             flow.load({
                 elem:'.layui-show',
                 md:0,
-                end : '没有更多了',
                 done(page,next)
                 {
                     $.ajax({
@@ -94,7 +93,7 @@
                         dataType : 'json',
                         beforeSend(){
                             layer.open({
-                                type: 3,offset: ['auto', '43%']
+                                type: 3
                             });
                         },
                         success(r) {
@@ -115,12 +114,13 @@
                                 }
                                 $('.layui-tab-item.layui-show').html(html);
                             }
+
+                            layer.closeAll();
                             if(page > 1)
                             {
-                                console.log(1);
                                 if (r.status == 0)
                                 {
-                                    //html = nothing.replace('[TEXT]',r.msg);
+                                    layer.msg('没有更多了');
                                 }
                                 if(r.status == 1)
                                 {
@@ -131,10 +131,11 @@
                                         html += coupon_line.replace('[TITLE]',data[i].coupon.title).replace('[PRICE]',data[i].price).replace('[NUMBER]',data[i].number).replace('[STATUS]',data[i].status_text).replace('[TIME]',data[i].time);
                                     }
                                     $('.layui-tab-item.layui-show').html(html);
+
+                                    layer.closeAll();
                                 }
                             }
-                            layer.closeAll();
-                            next('',page < r.pages);
+                            next('',page <= r.pages);
                         }
                     });
                 }

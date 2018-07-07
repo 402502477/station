@@ -20,10 +20,13 @@ Route::group(['prefix' => 'member'],function(){
     Route::any('get','Api\MemberApiController@get');
     Route::get('create','Api\MemberApiController@create');
     Route::post('find','Api\MemberApiController@find');
+    Route::post('receipt','Api\MemberApiController@receipt');
+    Route::post('getReceipt','Api\MemberApiController@getReceipt');
 });
 Route::group(['prefix' => 'order'],function(){
     Route::any('get','Api\OrderApiController@get');
     Route::post('create','Api\OrderApiController@create');
+    Route::post('getToMember','Api\OrderApiController@getToMember');
 });
 Route::group(['prefix' => 'coupon'],function(){
     Route::group(['prefix' => 'collect'],function(){

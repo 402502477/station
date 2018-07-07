@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderApiController extends CommonController
 {
+    private $status = ['无','未付款','已支付'];
     public function get(Request $request)
     {
         $wh = [];
@@ -24,11 +25,10 @@ class OrderApiController extends CommonController
         $select = ['id','mid','uid','order_id','original_point','current_point','goods_info','extend','create_at','status'];
 
         $datum = Order::where($wh)->select($select)->orderBy('create_at','desc')->skip($skip)->take($take)->get();
-        $status = ['无','未付款','已支付'];
         foreach ($datum as &$vl)
         {
             if(empty($mid)) $vl['username'] = $vl->member['username'];
-            $vl['status_text'] = $status[$vl['status']];
+            $vl['status_text'] = $this->status[$vl['status']];
         }
 
         $count = Order::where($wh)->count();
@@ -111,5 +111,25 @@ class OrderApiController extends CommonController
             return ['status' => 1,'msg' => '创建订单成功！'];
         }
         return ['status' => 0,'msg' => '创建订单失败！'];
+    }
+    public function getToMember(Request $request)
+    {
+        $uid = 'oLKAB1bcmTVvKN7AHRdcEA9p5OiM';//TODO 测试数据
+        $wh = [
+            'uid' => $uid
+        ];
+        $res = Order::where($wh)->get();
+        if(empty(count($res)))
+        {
+            return ['status' => 0 ,'msg' => '暂无数据'];
+        }
+
+        foreach ($res as &$vl)
+        {
+            $vl['member'] = $vl->member;
+            $vl['status_text'] = $this->status[$vl['status']];
+        }
+
+        return ['status' => 1 ,'data' => $res];
     }
 }
