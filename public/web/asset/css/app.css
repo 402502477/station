@@ -27,6 +27,89 @@ html{
     font-size: 1.5rem;
     color: #949394;
 }
+/* index */
+.index{
+    background-color: #fff;
+}
+.index .index-block{
+    box-sizing: border-box;
+    padding: 0.5rem 1rem;
+}
+.index .index-block .line{
+    border-bottom: 1px solid #eee;
+    margin: 0.5rem 0;
+    padding: 1rem 0.5rem;
+}
+.index .line .title{
+    width: 30%;
+    float: left;
+    box-sizing: border-box;
+}
+.index .line .input{
+    width: 70%;
+    float: left;
+    box-sizing: border-box;
+    color: #6c6c6c;
+}
+.index .line .input input{
+    border: none;
+    text-align: right;
+    width: 90%;
+    color: #6c6c6c;
+}
+.index .line .input .select{
+    width: 90%;
+    height: 1rem;
+    float: left;
+}
+.switch_block{
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+.switch_block .mask{
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 65%;
+    background-color: #000;
+    opacity: 0.5;
+}
+.switch_block .switch{
+    width: 100%;
+    height: 35%;
+    position: absolute;
+    bottom: 0;
+    opacity: 1;
+    background-color: #eee;
+    padding: 0.5rem;
+    box-sizing: border-box;
+}
+.switch_block .switch .line{
+    margin: 0.2rem;
+}
+.switch_block .switch .cancel{
+    float: left;
+    color:#777;
+}
+.switch_block .switch .sure{
+    float: right;
+    color:#009688;
+}
+.switch_block .content{
+}
+.switch_block .content li{
+    text-align: center;
+    padding: 0.5rem;
+}
+.switch_block .content li.active
+{
+    border: 1px solid #5FB878;
+    font-size: 1.2rem;
+}
+
 
 
 /* member css */
@@ -256,7 +339,10 @@ html{
 .overview .receipt_line .is_check i{
     color: #5FB878;
 }
-
+/* recharge */
+.overview .recharge .button {
+    margin-top: 2.5rem;
+}
 
 /*font*/
 @font-face {
