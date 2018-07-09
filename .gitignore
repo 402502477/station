@@ -2,7 +2,7 @@
 /public/hot
 /public/storage
 /vendor
-/storage/logs/*
+/storage/*
 /.idea
 /.vscode
 /.vagrant
