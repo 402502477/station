@@ -124,4 +124,49 @@ class MemberApiController extends CommonController
 
         return $receipt;
     }
+    public function changeBalance(Request $request)
+    {
+        $point = $request -> input('point',0);
+        $mark = $request -> input('mark');
+        $mid = $request -> input('mid');
+
+        Validator::make(['point' => $point,'mark'=>$mark],[
+            'point' => 'required|numeric',
+            'mark' => 'required',
+        ])->validate();
+
+
+        $res = Member::find($mid);
+        $balance = $res -> balance;
+        if($mark == 'plus')
+        {
+            $balance = $balance + $point;
+        }
+        if($mark == 'less')
+        {
+            $balance = $balance - $point;
+            if($balance < 0)
+            {
+                return [
+                    'status' => 0,
+                    'msg' => '调整后的余额不可以为0或小于0！'
+                ];
+            }
+        }
+        $res -> balance = $balance;
+        $rs = $res ->save();
+        if($rs)
+        {
+            return [
+                'status' => 1,
+                'msg' => '调整余额成功！',
+                'balance' => $res -> balance
+            ];
+        }
+        return [
+            'status' => 1,
+            'msg' => '调整余额失败！'
+        ];
+
+    }
 }

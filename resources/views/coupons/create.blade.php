@@ -27,6 +27,23 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-inline">
+                        <span for="type" class="layui-form-label">优惠对象</span>
+                        <div class="layui-input-block">
+                            <select id="object" name="object">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <span for="type" class="layui-form-label">金额限制</span>
+                        <div class="layui-input-block">
+                            <input type="text" name="use_limit" class="layui-input" id="use_limit" placeholder="请输入优惠券最低消费金额">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
                         <span for="deadlineType" class="layui-form-label">期限类型</span>
                         <div class="layui-input-block">
                             <select name="deadline_type" id="deadlineType" lay-filter="deadlineType">
@@ -91,21 +108,46 @@
 @stop
 @section('footer')
     <script>
-        layui.use(['form', 'layedit', 'laydate','layer'], function(){
+        layui.use(['form', 'layedit', 'laydate','layer','jquery'], function(){
             let layer = layui.layer;
             let introduce = layui.layedit ;
+            let jq = layui.jquery;
+            let laydate = layui.laydate;
+            let form = layui.form;
+            //获得产品
+            jq.ajax({
+                url : '/api/setting/index',
+                data: {type : 'product'},
+                type : 'post',
+                dataType : 'json',
+                success(r)
+                {
+                    let data = r.data;
+                    let html = '<option value="">通用</option>';
+                    if(data)
+                    {
+                        for(let i in data)
+                        {
+                            html += '<option value="'+data[i]+'">'+data[i]+'</option>';
+                        }
+                    }
+                    jq('select[name=object]').html(html);
+                    form.render();
+                }
+            });
+
+
+
             let content = introduce.build('introduce',{
                 hideTool:['face','image']
             });
 
-            let laydate = layui.laydate;
             laydate.render({
                 elem: '#range_day',
                 type:'datetime',
                 range:true,
                 calendar: true
             });
-            let form = layui.form;
             form.verify({
                 content(){
                     introduce.sync(content);

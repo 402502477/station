@@ -23,11 +23,11 @@
     </div>
     <div class="layui-row owner-block">
         <div class="layui-col-xs6">
-            <div class="owner-body" data-url="recharge.html">
+            <div class="owner-body" data-url="" id="balance">
                 <div class="icon">
                     <i class="iconfont">&#xe65a;</i>
                 </div>
-                <div class="text">余额<span class="balance"></span>元</div>
+                <div class="text">余额<span class="balance" ></span>元</div>
             </div>
         </div>
         <div class="layui-col-xs6">
@@ -80,14 +80,7 @@
 <script>
     layui.use('layer', function(){
         let layer = layui.layer;
-        $('.app-boyd').click(function(){
-            let url = $(this).data('url');
-            app.navigateTo(url);
-        });
-        $('.owner-body').click(function(){
-            let url = $(this).data('url');
-            app.navigateTo(url);
-        });
+
         $.ajax({
             url: '/api/member/find',
             data : {},
@@ -116,6 +109,37 @@
                 layer.closeAll();
             }
         })
+        $.ajax({
+            url: '/api/setting/get',
+            type : 'post',
+            dataType : 'json',
+            success(r)
+            {
+                let able = false;
+                if(r)
+                {
+                    if(r.balance) able = r.balance.switch || false;
+                }
+                if(able)
+                {
+                    $('#balance').attr('data-url','recharge.html');
+                    return null;
+                }
+                $('#balance').click(function(event){
+                    layer.open({
+                        content :'系统暂未开启余额充值功能！'
+                    });
+                });
+            }
+        });
+        $('.app-boyd').click(function(){
+            let url = $(this).data('url');
+            if(url) app.navigateTo(url);
+        });
+        $('.owner-body').click(function(){
+            let url = $(this).data('url');
+            if(url) app.navigateTo(url);
+        });
     });
 </script>
 </body>

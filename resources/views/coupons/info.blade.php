@@ -7,7 +7,75 @@
         </div>
         <div class="panel-body">
             <form class="form-horizontal" id="info">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">优惠券编号</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">[id]</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">标题</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">[title]</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">发放时间</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">[send_type]</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">使用对象</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">[object]</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">金额限制</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">[use_limit]</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">使用期限</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">[time]</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">折扣</label>
+                    <div class="col-sm-10"><p class="form-control-static">[discount]</p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">优惠券介绍</label>
+                    <div class="col-sm-10">
+                        <hr>
+                        <p class="form-control-static">[introduce]</p>
+                        <hr>
+                    </div>
+                    <div class="col-sm-10 col-sm-offset-2">
 
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="" class="col-sm-2 control-label">库存</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static col-sm-2 stock">[stock]</p>
+                        <div class="col-sm-10 form-inline">
+                            <input type="number" class="form-control input-sm" name="num">
+                            <button class="btn btn-xs btn-success change_stock" type="button" data-type="1">增加</button>
+                            <button class="btn btn-xs btn-danger change_stock" type="button" data-type="2">减少</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label">状态切换</label>
+                    <div class="col-sm-10">
+                        <p class="form-control-static">[button]</p>
+                    </div>
+                </div>
             </form>
         </div>
         <div class="panel-heading">
@@ -70,6 +138,8 @@
         let search;
         let keywords;
 
+
+        let html = $('#info').html();
         let collect_html;
         collect_html = $('.coupon_collect_list tbody').html();
         getData(collect_html);
@@ -140,17 +210,19 @@
         $('button[name=searching]').click(function(){
             search = $('select[name=search]').val();
             keywords = $('input[name=keywords]').val();
+            if(!search || !keywords)
+            {
+                app.layOpen('请先选择搜索类型并输入搜索内容！',2);
+                return;
+            }
             getData(collect_html);
         });
-
 
 
         /* 获取卡券信息部分 */
         getInfo();
         function getInfo()
         {
-            let html = '<div class="form-group"><label class="col-sm-2 control-label">优惠券编号</label><div class="col-sm-10"><p class="form-control-static">[id]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">标题</label><div class="col-sm-10"><p class="form-control-static">[title]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">发放时间</label><div class="col-sm-10"><p class="form-control-static">[send_type]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">使用期限</label><div class="col-sm-10"><p class="form-control-static">[time]</p></div></div><div class="form-group"><label class="col-sm-2 control-label">折扣</label><div class="col-sm-10"><p class="form-control-static">[discount]</p></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">优惠券介绍</label><div class="col-sm-10"><p class="form-control-static">[introduce]</p></div><div class="col-sm-10 col-sm-offset-2"></div></div><div class="form-group"><label for="" class="col-sm-2 control-label">库存</label><div class="col-sm-10"><p class="form-control-static col-sm-2">[stock]</p><div class="col-sm-10 form-inline"><input type="number" class="form-control input-sm" name="num"> <button class="btn btn-xs btn-success change_stock" type="button" data-type="plus">增加</button> <button class="btn btn-xs btn-danger change_stock" type="button" data-type="down">减少</button></div></div></div><div class="form-group"><label class="col-sm-2 control-label">状态切换</label><div class="col-sm-10"><p class="form-control-static">[button]</p></div></div>';
-
             $.ajax({
                 url : '{{ url("api/coupon/info",$id) }}',
                 type : 'get',
@@ -161,6 +233,7 @@
                 },
                 success(res)
                 {
+                    let info_html = '';
                     let button = '';
                     if(res.status === 1)
                     {
@@ -170,8 +243,9 @@
                     {
                         button = '<button type="button" class="btn btn-success btn-sm change_status">开启</button>'
                     }
-                    html = html.replace('[id]',res.id).replace('[title]',res.title).replace('[time]',res.time_limit).replace('[discount]',res.discount).replace('[introduce]',res.describes).replace('[stock]',res.stock).replace('[button]',button).replace('[send_type]',res.send_type_text);
-                    $('#info').html(html);
+                    let object = res.object?res.object: '通用';
+                    info_html = html.replace('[id]',res.id).replace('[title]',res.title).replace('[time]',res.time_limit).replace('[discount]',res.discount).replace('[introduce]',res.describes).replace('[stock]',res.stock).replace('[button]',button).replace('[send_type]',res.send_type_text).replace('[use_limit]',res.use_limit).replace('[object]',object);
+                    $('#info').html(info_html);
 
                     app.hidePreLoading();
 
@@ -190,11 +264,12 @@
                             dataType:'json',
                             success(r)
                             {
-                                if(r.code)
+                                if(r.status)
                                 {
                                     app.alert({
                                         content:r.msg,
-                                        onSure(){
+                                        onSure()
+                                        {
                                             getInfo()
                                         }
                                     });

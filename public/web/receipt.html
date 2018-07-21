@@ -34,7 +34,7 @@
                     </li>
                     <li>
                         <div class="button">
-                            <button class="layui-btn layui-btn-fluid" lay-submit>保存信息</button>
+                            <button class="layui-btn layui-btn-fluid" lay-submit type="button">保存信息</button>
                         </div>
                         <div class="button">
                             <button class="layui-btn layui-btn-fluid layui-btn-primary rest" type="reset">添加新发票</button>
@@ -58,11 +58,13 @@
     </li>
 </div>
 <script src="../layui/layui.js"></script>
+<script src="asset/js/app.js"></script>
 <script>
     layui.use(['form','jquery','layer'], function(){
         let form = layui.form;
         let jq = layui.jquery;
         let data = [];
+        let count = 0;//发票总数
 
         let receipt_list_html = jq('.receipt_list_html').html();
         getData();
@@ -79,6 +81,7 @@
                 },
                 success(r)
                 {
+                    count = r.length;
                     data = r;
                     if(r)
                     {
@@ -128,6 +131,11 @@
             }
         });
         form.on('submit',function(data){
+            if(count > 2)
+            {
+                app.alert(layer,'最多添加三条发票信息');
+                return false;
+            }
             jq.ajax({
                 url : '/api/member/receipt',
                 data:data.field,

@@ -39,7 +39,7 @@
     </div>
 </div>
 <div class="layui-hide coupon_line_html">
-    <div class="coupon_line layui-clear">
+    <div class="coupon_line layui-clear" onclick="app.navigateTo('/web/coupon_detail.html?id=[ID]')">
         <div class="left">
             <div class="title"><span>[TITLE]</span></div>
             <div class="price">￥ <span>[PRICE]</span></div>
@@ -109,7 +109,7 @@
                                     let data = r.data;
                                     for(let i in data)
                                     {
-                                        html += coupon_line.replace('[TITLE]',data[i].coupon.title).replace('[PRICE]',data[i].price).replace('[NUMBER]',data[i].number).replace('[STATUS]',data[i].status_text).replace('[TIME]',data[i].time);
+                                        html += coupon_line.replace('[TITLE]',data[i].coupon.title).replace('[PRICE]',data[i].price).replace('[NUMBER]',data[i].number).replace('[STATUS]',data[i].status_text).replace('[TIME]',data[i].time).replace('[ID]',data[i].id);
                                     }
                                 }
                                 $('.layui-tab-item.layui-show').html(html);
@@ -128,7 +128,7 @@
                                     let html = $('.layui-show').html();
                                     for(let i in data)
                                     {
-                                        html += coupon_line.replace('[TITLE]',data[i].coupon.title).replace('[PRICE]',data[i].price).replace('[NUMBER]',data[i].number).replace('[STATUS]',data[i].status_text).replace('[TIME]',data[i].time);
+                                        html += coupon_line.replace('[TITLE]',data[i].coupon.title).replace('[PRICE]',data[i].price).replace('[NUMBER]',data[i].number).replace('[STATUS]',data[i].status_text).replace('[TIME]',data[i].time).replace('[ID]',data[i].id);
                                     }
                                     $('.layui-tab-item.layui-show').html(html);
 

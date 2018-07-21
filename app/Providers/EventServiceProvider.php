@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'App\Events\EventCompletion' => [
             'App\Listeners\SendCouponToClient',
         ],
+        'App\Events\CompleteTheOrder' => [
+            'App\Listeners\TransformOrderStatus'
+        ],
     ];
 
     /**

@@ -116,7 +116,7 @@
 
 
                     layui.use('laypage', function(){
-                        let curr = parseInt(r.skip)+1;
+                        let curr = parseInt(r.skip/r.limit)+1;
                         let page = layui.laypage;
                         page.render({
                             elem: 'pagination',

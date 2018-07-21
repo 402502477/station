@@ -15,7 +15,10 @@ Auth::routes();
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/', 'Manages\HomeController@index')->name('home');
-
+    Route::group(['prefix' => 'Manages/auths'],function(){
+        Route::get('profile/{id}','Manages\AuthController@profile');
+        Route::get('logout','Manages\AuthController@logout');
+    });
     Route::group(['prefix' => 'Manages/members'],function(){
         Route::get('index','Manages\MemberController@index');
         Route::get('detail/{mid}','Manages\MemberController@detail');
@@ -30,5 +33,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::group(['prefix' => 'Manages/orders'],function(){
         Route::get('index','Manages\OrderController@index');
         Route::get('info/{oid}','Manages\OrderController@info');
+    });
+    Route::group(['prefix' => 'Manages/setting'],function(){
+        Route::get('index','Manages\SettingController@index');
     });
 });

@@ -33,12 +33,12 @@
                 <div class="text-line layui-clear">
                     <span class="left">请输入充值金额</span>
                     <span class="right">
-                        <input type="number" class="input">
+                        <input type="number" class="input" lay-verify="limit">
                         <i class="layui-icon">&#xe642;</i>
                     </span>
 
                     <div class="button">
-                        <button class="layui-btn layui-btn-fluid">充值</button>
+                        <button class="layui-btn layui-btn-fluid" lay-submit lay-filter="*">充值</button>
                     </div>
                 </div>
             </div>
@@ -47,8 +47,8 @@
     <fieldset class="layui-elem-field layui-field-title text-block">
         <legend>充值说明</legend>
         <div class="layui-field-box">
-            <div class="text-line layui-clear">
-                <span>充值xx，可享受xx优惠，请输入大于1元的金额</span>
+            <div class="text-line layui-clear promotion_info">
+                <span></span>
             </div>
         </div>
     </fieldset>
@@ -58,14 +58,20 @@
 <script>
     layui.use(['form','jquery','layer'], function(){
         let jq = layui.jquery;
+        let mask = '';
+        let limit = 0;
+        let form = layui.form;
+
         jq.ajax({
             url: '/api/member/find',
-            data : {},
+            data : {
+                //TODO 增加uid
+            },
             type : 'post',
             dataType : 'json',
             beforeSend(){
-                layer.open({
-                    type: 3,offset: ['auto', '43%']
+                mask =layer.open({
+                    type: 3
                 });
             },
             success(r)
@@ -82,9 +88,53 @@
                 jq('.avatar img').attr('src',data.info.headimgurl);
                 jq('.username span').text(data.username);
                 jq('.balance').text(data.balance);
+                layer.close(mask);
+            }
+        });
+        jq.ajax({
+            url: '/api/setting/get',
+            type : 'post',
+            dataType : 'json',
+            beforeSend(){
+                layer.open({
+                    type: 3
+                });
+            },
+            success(r)
+            {
+                let able = false;
+                if(r)
+                {
+                    if(r.balance) able = r.balance.switch || false;
+                }
+                if(able == false)
+                {
+                    layer.open({
+                        content : '系统未开启余额储值功能，请联系管理员'
+                    });
+                    return null;
+                }
+
+                let info = r.balance;
+                limit = info.limit;
+                let promotion_info = '充值即可享受' + info.point + info.type + '优惠,最低充值' + info.limit + '元';
+                jq('.promotion_info span').text(promotion_info);
                 layer.closeAll();
             }
-        })
+        });
+        form.verify({
+            limit(value)
+            {
+                if(value < limit)
+                {
+                    return '请充值大于'+limit+'金额！';
+                }
+            }
+        });
+        form.on('submit(*)',function(data){
+            let fields = data.field;
+            return false;
+        });
 
     });
 </script>

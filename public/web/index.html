@@ -3,32 +3,30 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>会员中心</title>
+    <title>主页</title>
     <link rel="stylesheet" href="asset/css/app.css">
     <link rel="stylesheet" href="../layui/css/layui.css">
 </head>
 <body>
+<form class="layui-form" action="" name="payment">
 <div class="index">
-    <div class="layui-carousel" id="test1">
-        <div carousel-item>
-            <div>条目1</div>
-            <div>条目2</div>
-            <div>条目3</div>
-            <div>条目4</div>
-            <div>条目5</div>
+    <div class="layui-carousel layui-hide" id="carousel">
+        <div carousel-item class="carousel_block">
+            <div class="piece" data-url="[url]">
+                <img [image] alt="">
+            </div>
         </div>
     </div>
 
-    <blockquote class="layui-elem-quote">引用区域的文字</blockquote>
+    <blockquote class="layui-elem-quote layui-hide" id="title"></blockquote>
     <div class="index-block">
-        <form class="layui-form" action="">
 
-            <div class="line layui-clear">
+            <div class="line layui-clear layui-hide" id="product">
                 <div class="title">
                     <span>产品</span>
                 </div>
                 <div class="input">
-                    <input type="number" name="price">
+                    <input type="text" name="product" class="select" data-type="product">
                     <i class="layui-icon">&#xe62a;</i>
                 </div>
             </div>
@@ -41,62 +39,292 @@
                     <i class="layui-icon">&#xe642;</i>
                 </div>
             </div>
-            <div class="line">
-
-                <button class="layui-btn layui-btn-fluid">流体按钮（最大化适应）</button>
+            <div class="line layui-clear">
+                <div class="title">
+                    <span>优惠券</span>
+                </div>
+                <div class="input">
+                    <input type="text" name="coupon" class="select" data-type="coupon">
+                    <i class="layui-icon">&#xe66e;</i>
+                </div>
             </div>
-        </form>
+            <div class="count layui-hide">
+                <span>正在计算...</span>
+            </div>
+            <div class="line">
+                <button class="layui-btn layui-btn-fluid select" type="button" data-type="payment">确定</button>
+                <input type="hidden" name="payment_value" value="">
+            </div>
+
     </div>
 </div>
-<div class="switch_block">
-    <div class="mask"></div>
+
+
+<div class="switch_block" style="display: none">
+    <div class="mask" style="display: none"></div>
     <div class="switch">
         <div class="line layui-clear">
             <span class="cancel">取消</span>
-            <span class="sure">确定</span>
+            <span class="sure" lay-submit lay-filter="*">确定</span>
         </div>
         <hr>
         <div class="content layui-clear">
-            <ul>
-                <li class="active">111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
-                <li>111111</li>
+            <ul class="layui-form">
+                <li class="layui-clear" id="options">
+                    <span class="value">[title]</span>
+                    <span class="radio"><input type="radio" name="options" data-id="[id]" data-title="[title]" data-type="[type]"></span>
+                </li>
             </ul>
         </div>
     </div>
 </div>
+</form>
 <script src="../layui/layui.js"></script>
 <script src="asset/js/app.js"></script>
 <script>
-    layui.use(['layer','jquery','carousel'], function(){
+    layui.use(['layer','jquery','carousel','form'], function(){
         let jq = layui.jquery;
         let carousel = layui.carousel;
-        //建造实例
-        carousel.render({
-            elem: '#test1'
-            ,width: '100%' //设置容器宽度
-            ,arrow: 'always' //始终显示箭头
-            //,anim: 'updown' //切换动画方式
+        let layer = layui.layer;
+        let form = layui.form;
+        let able_product = false;
+        let able_balance = false;
+
+        let carousel_html = jq('.carousel_block').html();
+        jq.ajax({
+            url : '/api/setting/index',
+            method : 'post',
+            dataType : 'json',
+            beforeSend()
+            {
+                layer.open({type:3});
+            },
+            success(r)
+            {
+                if(r.status == 0)
+                {
+                    layer.closeAll();
+                    return null;
+                }
+                able_balance = r.data.balance.switch||false;
+                if(r.data.product.length > 0)
+                {
+                    able_product = true;
+                    jq('#product').removeClass('layui-hide');
+                }
+                if(r.data.carousel.length > 0)
+                {
+                    let html = '';
+                    jq('#carousel').removeClass('layui-hide');
+                    let carousel_data = r.data.carousel;
+                    for(let i in carousel_data)
+                    {
+                        html += carousel_html.replace('[image]',"src='"+carousel_data[i].img+"'").replace('[url]',carousel_data[i].url);
+                    }
+                    jq('.carousel_block').html(html);
+
+                    jq('.piece').click(function(){
+                        let url = jq(this).data('url');
+                        if(url) return window.location = url;
+                    });
+                    carousel.render({
+                        elem: '#carousel',
+                        width: '100%',
+                        arrow: 'always'
+                    });
+                }
+                if(r.data.title)
+                {
+                    jq('#title').removeClass('layui-hide');
+                    jq('#title').text(r.data.title);
+                }
+                layer.closeAll();
+            }
         });
 
+        //计算总价
+        jq('input[name=price]').change(function(){
+            count_price(jq);
+        });
 
+        // picker 选择框
+        let options = jq('#options').html();
+        jq('.select').click(function(){
+            let type = jq(this).data('type');
+            if(type == 'product')
+            {
+                jq.ajax({
+                    url : '/api/setting/index',
+                    data : {
+                        type : type
+                    },
+                    type : 'post',
+                    success(r)
+                    {
+                        let html = '';
+                        for(let i in r.data)
+                        {
+                            html += options.replace('[title]',r.data[i]).replace('[title]',r.data[i]).replace('[type]',type);
+                        }
+                        jq('#options').html(html);
+                        form.render();
+                    }
+                });
+                jq('input[name=coupon]').val('');
+            }
+            if(type == 'coupon')
+            {
+                let product = jq('input[name=product]').val();
+                if(!product && able_product)
+                {
+                    app.alert(layer,'请先选择产品');
+                    return null;
+                }
+                let price = jq('input[name=price]').val();
+                if(!price)
+                {
+                    app.alert(layer,'请先输入金额');
+                    return null;
+                }
+                jq.ajax({
+                    url : '/api/coupon/collect/pickerToCoupon',
+                    data : {
+                        //TODO uid数据 优惠券使用权限
+                        product : product,
+                        price :price
+                    },
+                    type : 'post',
+                    success(r)
+                    {
+                        let html = '';
+                        if(r.data.length>0)
+                        {
+                            for(let i in r.data)
+                            {
+                                html += options.replace('[title]',r.data[i].number).replace('[title]',r.data[i].number).replace('[type]',type);
+                            }
+                        }else{
+                            html = options.replace('[title]','无').replace('[title]','').replace('[type]',type)
+                        }
+
+                        jq('#options').html(html);
+                        form.render();
+                    }
+                });
+            }
+            if(type == 'payment')
+            {
+                let html = '';
+                if(able_balance) html += options.replace('[title]','余额').replace('[title]','balance').replace('[type]',type);
+                html += options.replace('[title]','微信支付').replace('[title]','weChat').replace('[type]',type);
+                jq('#options').html(html);
+                form.render();
+            }
+
+
+            jq('.select').attr('disabled','true');
+            jq('.switch_block').fadeIn();
+            jq('.switch_block .mask').fadeIn();
+            jq('.switch_block .mask').animate({height:'65%'});
+            jq('.switch_block .switch').animate({height:'35%'});
+        });
+        jq('.cancel').click(function(){
+            jq('.switch_block .mask').animate({height:'100%'});
+            jq('.switch_block .switch').animate({height:0},function(){
+                jq('.select').removeAttr('disabled').val('');
+                jq('.switch_block').fadeOut();
+            });
+        });
+        jq('.sure').click(function(){
+            jq('.switch_block .mask').animate({height:'100%'});
+            jq('.switch_block .switch').animate({height:0},function(){
+                jq('.select').removeAttr('disabled');
+                jq('.switch_block').fadeOut();
+            });
+            let type = jq('input[name=options]:checked').data('type');
+            let title = jq('input[name=options]:checked').data('title');
+            jq('input[name='+type+']').val(title);
+            jq('input[name='+type+'_value]').val(title);
+            if( type == 'coupon' )
+            {
+                //选择优惠券，计算价格
+                count_price(jq);
+            }
+            if( type == 'payment')
+            {
+                form.on('submit(*)', function(data){
+                    let field = data.field;
+                    if(!field.product && able_product)
+                    {
+                        app.alert(layer,'请先选择产品');
+                        return false;
+                    }
+                    if(!field.price)
+                    {
+                        app.alert(layer,'请输入金额');
+                        return false;
+                    }
+                    if(!field.payment_value)
+                    {
+                        app.alert(layer,'请选择支付方式');
+                        return false;
+                    }
+                    jq.ajax({
+                        url : '/api/order/create',
+                        data : field,
+                        type : 'post',
+                        dataType : 'json',
+                        beforeSend()
+                        {
+                            layer.open({type:3});
+                        },
+                        complete(r)
+                        {
+                            let response = r.responseJSON;
+                            layer.closeAll();
+                            if(r.status == 422) app.alert(layer,response.message);
+                            if(r.status == 200)
+                            {
+                                if(response.status == 0) app.alert(layer,response.msg);
+
+                                if(response.status == 1) app.alert(layer,response.msg,1,1);
+                            }
+                            jq('input').val('');
+                            jq('.count').addClass('layui-hide');
+                        }
+                    });
+                    return false;
+                });
+
+            }
+        });
     });
+    function count_price(jq)
+    {
+        let price = jq('input[name=price]').val();
+        let coupon_number = jq('input[name=coupon]').val();
+        let product = jq('input[name=product]').val();
+        if(price == '') return;
+        jq.ajax({
+            url : '/api/setting/count',
+            type : 'post',
+            data : {
+                price:price,
+                coupon_number:coupon_number,
+                product:product
+            },
+            dataType:'json',
+            beforeSend()
+            {
+                jq('.count').removeClass('layui-hide');
+                jq('.count span').text('正在计算...');
+            },
+            success(r)
+            {
+                jq('.count span').text(r+' 元');
+            }
+        });
+    }
 </script>
 </body>
 </html>

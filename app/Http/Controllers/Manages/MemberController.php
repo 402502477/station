@@ -7,6 +7,7 @@ use App\Http\Controllers\CommonController;
 use App\Model\Coupon;
 use App\Model\CouponCollect;
 use App\Model\Member;
+use App\Model\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Event;
@@ -30,6 +31,11 @@ class MemberController extends CommonController
         $info['receipt_info'] = json_decode($info['receipt_info'],true);
         $info['gender'] = $gender[$info['info']['sex']];
         $info['level_text'] = $level[$info['level']];
+
+        $info['order_count'] = Order::where([
+            ['uid',$info['uid']],
+            ['status',2]
+        ])->count();
 
         return view('members/detail',[
             'active' => '',

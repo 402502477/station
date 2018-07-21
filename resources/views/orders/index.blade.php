@@ -23,7 +23,9 @@
                         <div class="form-group">
                             <select class="form-control input-sm" name="search">
                                 <option value="">请选择搜索类型</option>
-                                <option value="id">订单编号</option>
+                                <option value="order_id">订单编号</option>
+                                <option value="id">ID</option>
+                                <option value="mid">用户ID</option>
                             </select>
                             <input type="text" class="form-control input-sm"  name="keywords">
                             <button class="btn btn-default btn-sm" type="button" name="searching">搜索</button>
@@ -118,7 +120,7 @@
 
 
                     layui.use('laypage', function(){
-                        let curr = parseInt(r.skip)+1;
+                        let curr = parseInt(r.skip/r.limit)+1;
                         let page = layui.laypage;
                         page.render({
                             elem: 'pagination',

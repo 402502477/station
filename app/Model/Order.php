@@ -19,11 +19,6 @@ class Order extends Model
 
     const DELETED_AT = 'delete_at';
 
-
-    public function getDateFormat()
-    {
-        return date('Y-m-d H:i');
-    }
     public function freshTimestamp()
     {
         return time();

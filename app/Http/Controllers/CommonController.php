@@ -7,6 +7,20 @@ use Illuminate\Support\Facades\Cache;
 
 class CommonController extends Controller
 {
+    protected $today;
+
+    protected $thisWeek;
+
+    protected $thisMonth;
+
+    protected $thisYear;
+
+    protected $lastToday;
+
+    protected $lastWeek;
+
+    protected $lastMonth;
+
     protected $access_token;
 
     protected function toApi($var)
@@ -30,6 +44,36 @@ class CommonController extends Controller
     public function __construct()
     {
         $this -> access_token = $this -> wxGetAccessToken();
+
+        $this -> today = [
+            strtotime(date('Y-m-d 00:00:00',time())),
+            strtotime(date('Y-m-d 23:59:59',time()))
+        ];
+        $this -> thisWeek = [
+            strtotime(date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),date("d")-date("w")+1,date("Y")))),
+            strtotime(date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("d")-date("w")+7,date("Y"))))
+        ];
+        $this -> thisMonth = [
+            strtotime(date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),1,date("Y")))),
+            strtotime(date("Y-m-d H:i:s",mktime(23,59,59,date("m"),date("t"),date("Y"))))
+        ];
+
+        $this -> thisYear = [
+            strtotime(date("Y-1-1 00:00:00",time())),
+            strtotime(date("Y-12-31 23:23:59",time()))
+        ];
+        $this -> lastToday = [
+            strtotime(date('Y-m-d 00:00:00',strtotime("-1 week"))),
+            strtotime(date('Y-m-d 23:59:59',strtotime("-1 week")))
+        ];
+        $this -> lastWeek = [
+            strtotime(date('Y-m-d 00:00:00',strtotime("-2 week Monday"))),
+            strtotime(date('Y-m-d 23:59:59',strtotime("-1 week Sunday")))
+        ];
+        $this -> lastMonth = [
+            strtotime(date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m")-1,1,date("Y")))),
+            strtotime(date("Y-m-d H:i:s",mktime(0, 0 , 0,date("m"),0,date("Y"))))
+        ];
     }
 
     /**
@@ -137,5 +181,19 @@ class CommonController extends Controller
         ];
         $wx_info = json_decode($this->doGet($url,$data),true);
         return $wx_info;
+    }
+
+    public function upload(Request $request)
+    {
+        $files = $request->file('file');
+
+        $path = 'assets/upload/avatar/'.date('Ymd',time()).'/';
+        $fileType = $files->getClientOriginalExtension();
+        $fileName = md5(time().rand(10000,9999)).'.'.$fileType;
+        $files ->move($path,$fileName);
+
+        return [
+            'path' => asset($path.$fileName)
+        ];
     }
 }

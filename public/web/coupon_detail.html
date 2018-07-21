@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>优惠券详情</title>
+    <link rel="stylesheet" href="asset/css/app.css">
+    <link rel="stylesheet" href="../layui/css/layui.css">
+</head>
+<body>
+<div class="overview">
+    <div class="layui-card coupon_detail">
+        <div class="layui-card">
+            <div class="layui-card-header">优惠券详情</div>
+            <div class="layui-card-body">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>名称</legend>
+                    <div class="layui-field-box title">
+
+                    </div>
+                </fieldset>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>使用期限</legend>
+                    <div class="layui-field-box time">
+
+                    </div>
+                </fieldset>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>优惠金额</legend>
+                    <div class="layui-field-box price">
+                    </div>
+                </fieldset>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>限制</legend>
+                    <div class="layui-field-box">
+                        <div class="product">产品：
+                            <span></span>
+                        </div>
+                        <div class="use_limit">最低消费：
+                            <span></span>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>详情</legend>
+                    <div class="layui-field-box describe">
+
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../layui/layui.js"></script>
+<script src="asset/js/app.js"></script>
+<script>
+    layui.use(['layer','jquery'], function(){
+        let jq = layui.jquery;
+        let layer = layui.layer;
+
+        let get = app.get();
+        jq.ajax({
+            url : '/api/coupon/collect/info',
+            data :{
+                id : get.id
+            },
+            type:'post',
+            dataType :'json',
+            beforeSend()
+            {
+                layer.open({type:3});
+            },
+            success(res)
+            {
+                if(res.status == 0)
+                {
+                    return window.history.back();
+                }
+                let data = res.data;
+                let coupon = data.coupon;
+                jq('.title').html(coupon.title + '<br/>' + data.number);
+                jq('.time').text(data.time);
+                jq('.product span').text(data.product);
+                jq('.use_limit span').text(data.use_limit);
+                jq('.price').text(data.price);
+                jq('.describe').html(coupon.describes);
+                layer.closeAll();
+            }
+        });
+    });
+</script>
+</body>
+</html>

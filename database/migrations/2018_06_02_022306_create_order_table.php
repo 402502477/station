@@ -22,6 +22,7 @@ class CreateOrderTable extends Migration
             $table->float('current_point',8,2)->default(0.00)->comment('订单现价/现积分');
             $table->string('promotions_info',255)->nullable()->comment('优惠信息');
             $table->string('goods_info',255)->nullable()->comment('商品信息');
+            $table->string('payment',50)->comment('支付方式');
 
             $table->index(['mid','uid']);
 

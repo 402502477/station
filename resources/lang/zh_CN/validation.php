@@ -90,7 +90,7 @@ return [
     ],
     'not_in'               => 'The selected :attribute is invalid.',
     'not_regex'            => 'The :attribute format is invalid.',
-    'numeric'              => 'The :attribute must be a number.',
+    'numeric'              => ' :attribute 字段必须为数字.',
     'present'              => 'The :attribute field must be present.',
     'regex'                => 'The :attribute format is invalid.',
     'required'             => ' :attribute 字段不得为空！.',
@@ -150,7 +150,10 @@ return [
         'discount_type' => '折扣类型',
         'discount' => '折扣点数',
         'deadline_type' => '截止日期类型',
-        'deadline' => '截止日期'
+        'deadline' => '截止日期',
+        'use_limit' => '金额限制',
+        'limit' => '限制',
+        'point' => '点数'
     ],
 
 ];

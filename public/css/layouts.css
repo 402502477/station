@@ -139,3 +139,30 @@
     -webkit-transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
     transform: translate(-100px, -100px) scale(1) translate(100px, 100px);
 }
+/* index */
+#weekly_sales{
+    height: 25rem;
+}
+/* setting */
+#setting .layui-form-label{
+    width: auto;
+}
+#setting .img-rounded{
+    width: 10rem;
+}
+#setting .line{
+    margin: 1rem 0 0 0;
+}
+#setting .layui-form-pane .layui-form-label{
+    width: 110px;
+}
+/* user */
+#profile .avatar
+{
+    width: 8rem;
+}
+#profile h3.name
+{
+    margin: 2rem 0 0 0;
+}
+

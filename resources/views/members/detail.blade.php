@@ -15,14 +15,11 @@
                     </div>
                     <div class="profile-stat">
                         <div class="row">
-                            <div class="col-md-4 stat-item">
-                                45 <span>余额</span>
+                            <div class="col-md-6 stat-item">
+                                <span class="balance">{{ $info['balance'] }}</span> <span>余额</span>
                             </div>
-                            <div class="col-md-4 stat-item">
-                                15 <span>金币</span>
-                            </div>
-                            <div class="col-md-4 stat-item">
-                                123 <span>交易数</span>
+                            <div class="col-md-6 stat-item">
+                                {{ $info['order_count'] }} <span>交易数</span>
                             </div>
                         </div>
                     </div>
@@ -42,10 +39,16 @@
                     @if($info['receipt_info'])
                         <div class="profile-info">
                             <h4 class="heading">发票信息</h4>
-                            <ul class="list-unstyled list-justify">
-                                <li>xx <span></span></li>
-                                <li>发票信息 </li>
-                            </ul>
+                            <div class="list-unstyled list-justify">
+                                <div class="layui-collapse" >
+                                    @foreach($info['receipt_info'] as $value)
+                                        <div class="layui-colla-item">
+                                            <h2 class="layui-colla-title">{{ $value['title'] }}</h2>
+                                            <div class="layui-colla-content {{ $value['is_default']? 'layui-show' :'' }}">{{ $value['content'] }}</div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
                         </div>
                     @endif
                     {{--<div class="profile-info">
@@ -59,45 +62,24 @@
             <!-- END LEFT COLUMN -->
             <!-- RIGHT COLUMN -->
             <div class="profile-right">
-                {{--<h4 class="heading">会员信息</h4>
+                <h4 class="heading">基本功能</h4>
                 <!-- AWARDS -->
                 <div class="awards">
                     <div class="row">
-                        <div class="col-md-3 col-sm-6">
-                            <div class="award-item">
-                                <div class="hexagon">
-                                    <span class="lnr lnr-sun award-icon"></span>
+                        <form class="layui-form" action="">
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">余额</label>
+                                <div class="layui-input-inline">
+                                    <input type="text" name="balance" lay-verify="required|number" placeholder="请输入调整的金额" autocomplete="off" class="layui-input">
                                 </div>
-                                <span>Most Bright Idea</span>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="award-item">
-                                <div class="hexagon">
-                                    <span class="lnr lnr-clock award-icon"></span>
+                                <div class="layui-input-inline">
+                                    <button class="layui-btn" type="button" lay-filter="*" lay-submit name="plus">增加</button>
+                                    <button class="layui-btn layui-btn-warm" type="button" lay-filter="*" lay-submit name="less">减少</button>
                                 </div>
-                                <span>Most On-Time</span>
                             </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="award-item">
-                                <div class="hexagon">
-                                    <span class="lnr lnr-magic-wand award-icon"></span>
-                                </div>
-                                <span>Problem Solver</span>
-                            </div>
-                        </div>
-                        <div class="col-md-3 col-sm-6">
-                            <div class="award-item">
-                                <div class="hexagon">
-                                    <span class="lnr lnr-heart award-icon"></span>
-                                </div>
-                                <span>Most Loved</span>
-                            </div>
-                        </div>
+                        </form>
                     </div>
-                    <div class="text-center"><a href="#" class="btn btn-default">See all awards</a></div>
-                </div>--}}
+                </div>
                 <!-- END AWARDS -->
                 <!-- TABBED CONTENT -->
                 <div class="custom-tabs-line tabs-line-bottom left-aligned">
@@ -106,7 +88,7 @@
                         <li class=""><a href="#order" role="tab" data-toggle="tab" aria-expanded="" name="order">订单记录</a></li>
                     </ul>
                 </div>
-                <div class="tab-content" style="height: 682px;">
+                <div class="tab-content">
                     {{--<div class="tab-pane fade in " id="step">
                         <ul class="list-unstyled activity-timeline">
                             <li>
@@ -190,6 +172,42 @@
 @stop
 @section('footer')
     <script>
+        layui.use(['element','form'], function(){
+            let element = layui.element;
+            let form = layui.form;
+            form.on('submit(*)',function(data){
+                let point = data.field.balance;
+                let mark = data.elem.name;
+                $.ajax({
+                    url : '/api/member/changeBalance',
+                    type : 'post',
+                    dataType : 'json',
+                    data :{
+                        point : point,
+                        mark : mark,
+                        mid : '{{ $mid }}'
+                    },
+                    beforeSend()
+                    {
+                        app.showPreLoading();
+                    },
+                    success(res)
+                    {
+                        if(res.status == 0)
+                        {
+                            app.alert({title:'提示',content:res.msg});
+                            return app.hidePreLoading();
+                        }
+                        app.alert({title:'提示',content:res.msg});
+                        $('.balance').text(res.balance);
+                        app.hidePreLoading();
+                    }
+                });
+                return false;
+            });
+
+        });
+
         let coupon_html = $('#coupon tbody').html();
         let order_html = $('#order tbody').html();
         let skip = 0;
@@ -235,7 +253,7 @@
                     callback(html,r);
 
                     layui.use('laypage', function(){
-                        let curr = parseInt(r.skip)+1;
+                        let curr = parseInt(r.skip/r.limit)+1;
                         let page = layui.laypage;
                         page.render({
                             elem: elem,

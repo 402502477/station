@@ -71,30 +71,16 @@ class CouponApiController extends CommonController
     }
     public function stock(Request $request)
     {
-        $num = $request -> input('num');
+        $quantity = $request -> input('num');
         $type = $request -> input('type');
         $id = $request -> input('id');
 
-        if(in_array('',[$num,$type,$id])) return $this->toApi(['code'=> 0 ,'msg' =>'参数错误，请重试！']);
-        $row = Coupon::find($id);
-        if($type == 'plus')
-        {
-            $row->stock += $num;
-        }
-        if($type == 'down')
-        {
-            $row->stock -= $num;
-        }
-        if($row['stock'] < 0)
-        {
-            return ['code'=> 0 ,'msg' => '库存无法改变为负数！'];
-        }
-        $res = $row -> save();
-        if($res)
-        {
-            return ['code' => 1,'msg' => '库存改变成功！'];
-        }
-        return ['code' => 0,'msg' => '库存改变失败！'];
+        if(in_array('',[$quantity,$type,$id])) return ['code'=> 0 ,'msg' =>'参数错误，请重试！'];
+
+        $coupon = new Coupon();
+        $stockChange = $coupon -> StockChange($id,$type,$quantity);
+
+        return $stockChange;
     }
     public function status(Request $request)
     {
@@ -136,7 +122,8 @@ class CouponApiController extends CommonController
             'discount_type' => 'required',
             'discount' => 'required',
             'introduce' => 'required',
-            'stock' => 'required'
+            'stock' => 'required',
+            'use_limit' => 'required|numeric'
         ])->validate();
 
         if($data['deadline_type'] == 'range_day') $data['deadline'] = $this -> rangeTimeToInt($data['deadline']);
@@ -149,10 +136,12 @@ class CouponApiController extends CommonController
                 'type' => $data['discount_type'],
                 'point' => $data['discount']
             ]),
+            'object' => $data['object'],
             'time_limit' => $this->toJson($data['deadline']),
             'extend' => $this->toJson($data),
             'stock' => $data['stock'],
-            'status' => 1
+            'status' => 1,
+            'use_limit'=>$data['use_limit']
         ];
         $res = Coupon::create($create);
         if($res)
