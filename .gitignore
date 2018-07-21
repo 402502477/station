@@ -4,7 +4,9 @@
 /public/data/*
 /public/assets/upload/*
 /vendor
-/storage/*
+/storage/app/*
+/storage/framework/*
+/storage/logs/*
 /.idea
 /.vscode
 /.vagrant
